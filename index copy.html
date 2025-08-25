@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geovisor - Subsecretaría de Planeación y Trnasición energética de SENER</title>
+
+    <!-- Google Fonts: Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+
+    <!-- Simple-DataTables CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+
+    <!-- MapTiler SDK CSS -->
+    <link href="https://cdn.maptiler.com/maptiler-sdk-js/v3.6.1/maptiler-sdk.css" rel="stylesheet" />
+
+    <!-- Leaflet Locate Control CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Preloader -->
+    <div id="preloader"
+        class="d-flex flex-column align-items-center justify-content-center position-fixed top-0 start-0 w-100 h-100">
+        <div class="text-center">
+            <img src="img/mujer.png" alt="logo gobierno de méxico" style="max-width: 10rem; margin-bottom: 1rem;">
+            <h3 class="fw-bold">Subsecretaría de Planeación y Transición Energética</h3>
+            <p class="text-muted fs-5">Cargando datos y capas...</p>
+            <div class="spinner-border text-main-color" role="status"
+                style="width:2.5rem; height:2.5rem; margin:1.5rem 0;">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <div class="progress" style="height: 8px; width: 80%; margin: 0 auto; background-color: #e9ecef;">
+                <div id="preProgressBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+                    aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar Institucional -->
+    <nav class="institutional-navbar">
+        <div class="container-fluid">
+            <div class="row align-items-center w-100">
+                <div class="col-md-3 d-flex justify-content-start">
+                    <div class="navbar-brand-left">
+                        <img src="img/logo_sener.png" alt="SENER - Secretaría de Energía" class="sener-logo">
+                    </div>
+                </div>
+                <div class="col-md-6 text-center">
+                    <h1 class="navbar-title">Geovisor Regional de Infraestructura Energética - 2024</h1>
+                    <p class="navbar-subtitle">Subsecretaría de Planeación y Transición Energética</p>
+                </div>
+                <div class="col-md-3 d-flex justify-content-end">
+                    <div class="navbar-brand-right">
+                        <img src="img/logo_gob.png" alt="Gobierno de México" class="gob-logo">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container py-4">
+            <p class="lead text-muted mb-4">Este geovisor presenta información solicitada sobre la infraestructura
+                energética y las políticas de transición energética en la región, como parte de la iniciativa de
+                actualización de geovisores regionales para la CELAC.</p>
+            <div id="total-cards-container" class="row mb-3" style="display: none;">
+                <!-- Total cards will be dynamically generated here -->
+            </div>
+            <div id="map-container" style="position: relative;">
+                <div id="map"></div>
+                <button id="center-map-btn" class="btn btn-light btn-sm" title="Centrar Mapa">
+                    <i class="bi bi-arrows-fullscreen"></i>
+                </button>
+            </div>
+            <div id="legend-container" class="mt-4" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Leyenda de Capas</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="legend-items" class="d-flex flex-wrap gap-3"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="table-container" class="mt-4" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Datos de la Capa</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="data-table"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer gob.mx -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h5>Enlaces</h5>
+                            <ul>
+                                <li><a href="#">Participa</a></li>
+                                <li><a href="#">Publicaciones Oficiales</a></li>
+                                <li><a href="#">Marco Jurídico</a></li>
+                                <li><a href="#">Plataforma Nacional de Transparencia</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <h5>¿Qué es gob.mx?</h5>
+                            <p>Es el portal único de trámites, información y participación ciudadana. <a href="#">Leer
+                                    más</a></p>
+                        </div>
+                        <div class="col-md-4">
+                            <h5>Síguenos en</h5>
+                            <ul class="social-icons">
+                                <li><a href="#"><i class="bi bi-facebook"></i></a></li>
+                                <li><a href="#"><i class="bi bi-twitter"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <img src="img/logo_gob.png" alt="logo gobierno de méxico" class="w-100" style="max-width: 200px;">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <hr class="my-4">
+                    <p class="text-center">Denuncia contra servidores públicos</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+
+    <!-- Leaflet JS (debe cargarse primero) -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+
+    <!-- MapTiler SDK (versión correcta) -->
+    <script src="https://cdn.maptiler.com/maptiler-sdk-js/v3.6.1/maptiler-sdk.umd.min.js"></script>
+    <script src="https://cdn.maptiler.com/leaflet-maptilersdk/v4.1.0/leaflet-maptilersdk.umd.min.js"></script>
+
+    <!-- Leaflet Locate Control (después de Leaflet) -->
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
+
+    <!-- Simple-DataTables JS -->
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
+
+    <!-- Leaflet.EasyPrint JS -->
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-easyprint@2.1.9/dist/bundle.min.js"></script>
+
+    <!-- Custom JS (al final) -->
+    <script src="index.js"></script>
+    <!-- <script src="elementos.js"></script> -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const map = MAPA.init({
+                container: 'map',
+                includeBasemapControl: true,
+                restrictToMexico: true
+            });
+
+            if (map) {
+                // The rest of the logic from the original index.js that deals with layers
+                const PRELOADER_ID = 'preloader';
+                const PRELOADER_BAR_ID = 'preProgressBar';
+                const urls = {
+                    'Ductos GLP': 'https://cdn.sassoapps.com/solicitud/ductos_glp.geojson',
+                    'Ductos de Importación': 'https://cdn.sassoapps.com/solicitud/ductos_importacion.geojson',
+                    'Ductos (no SISTRANGAS)': 'https://cdn.sassoapps.com/solicitud/ductos_nosistrangas.geojson',
+                    'Ductos Petrolíferos': 'https://cdn.sassoapps.com/solicitud/ductos_petroliferos.geojson',
+                    'Ductos SISTRANGAS': 'https://cdn.sassoapps.com/solicitud/ductos_sistrangas.geojson',
+                    'Proyectos Eléctricos': 'https://cdn.sassoapps.com/solicitud/electricidad_proyectos.geojson',
+                    'Gas LP': 'https://cdn.sassoapps.com/solicitud/gas_lp.geojson',
+                    'Gas Natural': 'https://cdn.sassoapps.com/solicitud/gas_natural.geojson',
+                    'Líneas de Transmisión': 'https://cdn.sassoapps.com/solicitud/lineas_transmision.geojson',
+                    'Subestaciones Eléctricas': 'https://cdn.sassoapps.com/solicitud/subestacion_electrica.geojson'
+                };
+
+                const layerColorMap = {
+                    'Ductos GLP': '#E66A54',
+                    'Ductos de Importación': '#E24849',
+                    'Ductos (no SISTRANGAS)': '#B64836',
+                    'Ductos Petrolíferos': '#E85D33',
+                    'Ductos SISTRANGAS': '#E85D14',
+                    'Proyectos Eléctricos': '#20705B',
+                    'Gas LP': '#C69A04',
+                    'Gas Natural': '#225655',
+                    'Líneas de Transmisión': '#58152A',
+                    'Subestaciones Eléctricas': '#7E1D37'
+                };
+
+                const overlayMaps = {};
+                const activeLayers = new Set();
+                const totalLayers = Object.keys(urls).length;
+                let loadedLayers = 0;
+                const layerFeatureCounts = {};
+
+                const updatePreloader = () => {
+                    loadedLayers++;
+                    const percent = Math.round((loadedLayers / totalLayers) * 100);
+                    const bar = document.getElementById(PRELOADER_BAR_ID);
+                    if (bar) {
+                        bar.style.width = `${percent}%`;
+                        bar.setAttribute('aria-valuenow', percent);
+                    }
+                };
+
+                const fetchPromises = Object.entries(urls).map(([name, url]) =>
+                    fetch(url)
+                        .then(response => {
+                            if (!response.ok) throw new Error(`Network response was not ok for ${name}`);
+                            return response.json();
+                        })
+                        .then(data => {
+                            const color = layerColorMap[name] || '#601623';
+                            const isPointLayer = data.features.some(f => f.geometry.type === 'Point' || f.geometry.type === 'MultiPoint');
+                            layerFeatureCounts[name] = Array.isArray(data.features) ? data.features.length : 0;
+
+                            const geoJsonLayer = L.geoJSON(data, {
+                                style: () => {
+                                    return { color: color, weight: 2 };
+                                },
+                                pointToLayer: (feature, latlng) => {
+                                    return L.circleMarker(latlng, { radius: 6, fillColor: color, color: '#fff', weight: 1, opacity: 1, fillOpacity: 0.8 });
+                                },
+                                onEachFeature: (feature, layer) => {
+                                    if (feature.properties) {
+                                        let popupContent = `<h6 style="color:${color}">${name}</h6><div class="table-responsive"><table class="table table-sm table-striped">`;
+                                        for (const key in feature.properties) {
+                                            popupContent += `<tr><th scope="row">${key}</th><td>${feature.properties[key]}</td></tr>`;
+                                        }
+                                        popupContent += '</table></div>';
+                                        layer.bindPopup(popupContent, { maxHeight: 200 });
+                                    }
+                                }
+                            });
+
+                            if (isPointLayer && L.markerClusterGroup) {
+                                const markers = L.markerClusterGroup({
+                                    chunkedLoading: true,
+                                    maxClusterRadius: 40
+                                });
+                                markers.addLayer(geoJsonLayer);
+                                overlayMaps[name] = markers;
+                            } else {
+                                overlayMaps[name] = geoJsonLayer;
+                            }
+                            updatePreloader();
+                        })
+                        .catch(error => {
+                            console.error(`Failed to load layer: ${name}`, error);
+                            updatePreloader();
+                        })
+                );
+
+                Promise.all(fetchPromises)
+                    .then(() => {
+                        const layersControl = L.control.layers(map._basemaps, overlayMaps, { collapsed: true }).addTo(map);
+                        window.layersControl = layersControl;
+
+                        map.on('overlayadd', function (e) {
+                            syncCardSwitch(e.name, true);
+                        });
+
+                        map.on('overlayremove', function (e) {
+                            syncCardSwitch(e.name, false);
+                        });
+
+                        if (typeof L.control.locate === 'function') {
+                            L.control.locate().addTo(map);
+                        }
+
+                        renderTotals();
+                    })
+                    .finally(() => {
+                        const preloader = document.getElementById(PRELOADER_ID);
+                        if (preloader) {
+                            preloader.classList.add('preloader-hide');
+                            setTimeout(() => preloader.style.display = 'none', 500);
+                        }
+                    });
+
+                function toggleLayer(name, enable) {
+                    const layer = overlayMaps[name];
+                    if (!layer) return;
+                    if (enable) {
+                        if (!map.hasLayer(layer)) map.addLayer(layer);
+                        activeLayers.add(name);
+                    } else {
+                        if (map.hasLayer(layer)) map.removeLayer(layer);
+                        activeLayers.delete(name);
+                    }
+                }
+
+                function renderTotals() {
+                    const container = document.getElementById('total-cards-container');
+                    if (!container) return;
+                    container.innerHTML = '';
+                    container.style.display = 'flex';
+                    container.classList.add('g-3', 'flex-wrap');
+                    Object.keys(layerFeatureCounts).forEach((name) => {
+                        const color = layerColorMap[name] || '#601623';
+                        const col = document.createElement('div');
+                        col.className = 'col-6 col-md-4 col-lg-3 col-xl-2';
+                        col.innerHTML = `
+                            <div class="card h-100 shadow-sm border-0 position-relative" style="border-top:4px solid ${color}">
+                                <div class="card-body py-2 px-3">
+                                    <div class="d-flex justify-content-between align-items-start mb-1">
+                                        <h6 class="card-title mb-0 me-1" style="font-size:.63rem; text-transform:uppercase; letter-spacing:.5px; color:${color}; flex:1;">${name}</h6>
+                                        <div class="form-check form-switch m-0" style="transform:scale(.8);">
+                                            <input class="form-check-input layer-switch" type="checkbox" data-layer="${name}" checked>
+                                        </div>
+                                    </div>
+                                    <p class="card-text mb-0" style="font-size:1.15rem; font-weight:600;">${layerFeatureCounts[name].toLocaleString('es-MX')}</p>
+                                </div>
+                            </div>`;
+                        container.appendChild(col);
+                        toggleLayer(name, true);
+                    });
+                    container.querySelectorAll('.layer-switch').forEach(input => {
+                        input.addEventListener('change', e => {
+                            const layerName = e.target.getAttribute('data-layer');
+                            const isChecked = e.target.checked;
+                            toggleLayer(layerName, isChecked);
+                            syncLayerControlCheckbox(layerName, isChecked);
+                        });
+                    });
+                    buildLegend();
+                }
+
+                function buildLegend() {
+                    const legendContainer = document.getElementById('legend-container');
+                    const legendItems = document.getElementById('legend-items');
+                    if (!legendContainer || !legendItems) return;
+                    legendContainer.style.display = 'block';
+                    legendItems.innerHTML = '';
+                    Object.keys(urls).forEach(name => {
+                        const color = layerColorMap[name] || '#601623';
+                        const item = document.createElement('div');
+                        item.className = 'legend-item d-flex align-items-center';
+                        item.innerHTML = `<span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:${color};margin-right:6px;border:1px solid #222"></span><span style="font-size:.8rem;">${name}</span>`;
+                        legendItems.appendChild(item);
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</body>
+
+</html>
