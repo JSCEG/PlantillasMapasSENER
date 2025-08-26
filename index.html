@@ -44,6 +44,170 @@
 
     <!-- Custom Styles -->
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Estilos para las nuevas funcionalidades */
+        .indicator-info-btn {
+            border: none !important;
+            background: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .indicator-info-btn:hover i {
+            color: #0d6efd !important;
+        }
+
+        #quick-stats .card-body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 0.375rem;
+        }
+
+        #quick-stats strong {
+            font-size: 1.1rem;
+            display: block;
+        }
+
+        .cluster-active {
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .cluster-tooltip {
+            background-color: rgba(0, 0, 0, 0.8) !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 4px !important;
+            padding: 4px 8px !important;
+            font-size: 0.8rem !important;
+        }
+
+        /* Mejorar la apariencia de los controles de configuración */
+        #saved-configs {
+            min-width: 120px;
+        }
+
+        /* Animación suave para mostrar/ocultar paneles */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Estilos para popups mejorados del mapa */
+        .custom-municipality-popup .leaflet-popup-content {
+            margin: 8px 12px;
+            line-height: 1.4;
+        }
+
+        .municipality-popup h6 {
+            margin-bottom: 8px;
+            font-size: 1rem;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 4px;
+        }
+
+        .municipality-popup .small {
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+
+        .impact-results {
+            background-color: #f8f9fa;
+            padding: 8px;
+            border-radius: 4px;
+            border-left: 3px solid #28a745;
+        }
+
+        .impact-results h6 {
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            border: none;
+            padding: 0;
+        }
+
+        .impact-results .badge {
+            font-size: 0.75rem;
+        }
+
+        /* Estilos para el gráfico interactivo */
+        #quartile-chart {
+            cursor: pointer;
+        }
+
+        .oculto {
+            display: none !important;
+        }
+
+        /* Animación para mostrar el gráfico */
+        #resultados-chart-container {
+            animation: slideInUp 0.5s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mejorar responsive design para mobile */
+        @media (max-width: 768px) {
+            #map {
+                height: 60vh !important;
+                min-height: 400px !important;
+            }
+
+            .col-lg-5 {
+                margin-bottom: 1rem;
+            }
+
+            .municipality-popup {
+                font-size: 0.9rem;
+            }
+
+            .custom-municipality-popup .leaflet-popup-content {
+                margin: 6px 8px;
+            }
+
+            /* Gráfico más compacto en móviles */
+            #quartile-chart {
+                height: 250px !important;
+            }
+
+            #resultados-chart-container {
+                margin-top: 1rem !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -159,7 +323,33 @@
                                             </small>
                                         </div>
 
-                                        <div class="d-flex gap-2 mb-3">
+                                        <!-- Panel de estadísticas rápidas (oculto inicialmente) -->
+                                        <div id="quick-stats" class="card bg-light mb-3" style="display: none;">
+                                            <div class="card-body p-2">
+                                                <h6 class="card-title mb-2"><i
+                                                        class="bi bi-speedometer2 me-1"></i>Estadísticas Rápidas</h6>
+                                                <div class="row g-2 text-center">
+                                                    <div class="col-6">
+                                                        <small class="text-muted d-block">Municipios</small>
+                                                        <strong id="total-municipalities">-</strong>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <small class="text-muted d-block">Promedio</small>
+                                                        <strong id="average-score">-</strong>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <small class="text-muted d-block">Mejor</small>
+                                                        <strong id="best-score" class="text-success">-</strong>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <small class="text-muted d-block">Peor</small>
+                                                        <strong id="worst-score" class="text-danger">-</strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex gap-2 mb-3 flex-wrap">
                                             <button type="button" id="normalize-weights"
                                                 class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip"
                                                 title="Ajusta los pesos para que sumen 1.0">
@@ -174,6 +364,22 @@
                                                 <i class="bi bi-x-circle me-1"></i>Limpiar
                                             </button>
                                         </div>
+
+                                        <div class="d-flex gap-2 mb-3 flex-wrap">
+                                            <button type="button" id="save-config"
+                                                class="btn btn-sm btn-outline-success" data-bs-toggle="tooltip"
+                                                title="Guardar configuración actual">
+                                                <i class="bi bi-save me-1"></i>Guardar
+                                            </button>
+                                            <button type="button" id="load-config" class="btn btn-sm btn-outline-info"
+                                                data-bs-toggle="tooltip" title="Cargar configuración guardada">
+                                                <i class="bi bi-folder-open me-1"></i>Cargar
+                                            </button>
+                                            <select id="saved-configs" class="form-select form-select-sm"
+                                                style="max-width: 150px;">
+                                                <option value="">Configuraciones...</option>
+                                            </select>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -185,6 +391,25 @@
                 <div class="col-lg-7 col-xl-8">
                     <div id="map-container" style="position: relative;">
                         <div id="map" style="width:100%; height:80vh; min-height:500px; border-radius: 0.375rem;"></div>
+                    </div>
+
+                    <!-- Gráfico de distribución por entidad (abajo del mapa) -->
+                    <div id="resultados-chart-container" class="mt-3 oculto">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0"><i class="bi bi-bar-chart-fill me-2"></i>Distribución por Entidad</h6>
+                                <button id="chart-toggle" class="btn btn-sm btn-outline-secondary">
+                                    <i class="bi bi-chevron-up me-1"></i>Ocultar
+                                </button>
+                            </div>
+                            <div class="card-body p-2" id="chart-container">
+                                <div id="quartile-chart" style="width: 100%; height: 300px;"></div>
+                                <small class="text-muted d-block mt-2 text-center">
+                                    <i class="bi bi-info-circle me-1"></i>Haz clic en una barra para ver el detalle de
+                                    la entidad
+                                </small>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -203,11 +428,12 @@
                                 <div class="row g-3">
                                     <div class="col-6 col-lg-3">
                                         <div class="card text-center p-2 border-success bg-success-subtle h-100">
-                                            <small data-bs-toggle="tooltip" title="25% de municipios con mejor puntaje">Q1
+                                            <small data-bs-toggle="tooltip"
+                                                title="25% de municipios con mejor puntaje">Q1
                                                 (Mejor)</small>
                                             <div id="q1-count" class="fs-5 fw-bold text-success">-</div>
-                                            <button class="btn btn-sm btn-outline-success quartile-btn mt-1" id="q1-toggle"
-                                                data-bs-toggle="tooltip" title="Ver/Ocultar en Mapa"><i
+                                            <button class="btn btn-sm btn-outline-success quartile-btn mt-1"
+                                                id="q1-toggle" data-bs-toggle="tooltip" title="Ver/Ocultar en Mapa"><i
                                                     class="bi bi-eye-fill"></i></button>
                                         </div>
                                     </div>
@@ -216,29 +442,31 @@
                                             <small data-bs-toggle="tooltip"
                                                 title="Municipios entre el 25% y 50% de puntaje">Q2</small>
                                             <div id="q2-count" class="fs-5 fw-bold text-warning">-</div>
-                                            <button class="btn btn-sm btn-outline-warning quartile-btn mt-1" id="q2-toggle"
-                                                data-bs-toggle="tooltip" title="Ver/Ocultar en Mapa"><i
+                                            <button class="btn btn-sm btn-outline-warning quartile-btn mt-1"
+                                                id="q2-toggle" data-bs-toggle="tooltip" title="Ver/Ocultar en Mapa"><i
                                                     class="bi bi-eye-fill"></i></button>
                                         </div>
                                     </div>
                                     <div class="col-6 col-lg-3">
-                                        <div class="card text-center p-2 h-100" style="border-color: #E67E22; background-color: #fcebd8;">
+                                        <div class="card text-center p-2 h-100"
+                                            style="border-color: #E67E22; background-color: #fcebd8;">
                                             <small data-bs-toggle="tooltip"
                                                 title="Municipios entre el 50% y 75% de puntaje">Q3</small>
                                             <div id="q3-count" class="fs-5 fw-bold" style="color: #E67E22;">-</div>
-                                            <button class="btn btn-sm quartile-btn mt-1" id="q3-toggle" data-bs-toggle="tooltip"
-                                                title="Ver/Ocultar en Mapa"
+                                            <button class="btn btn-sm quartile-btn mt-1" id="q3-toggle"
+                                                data-bs-toggle="tooltip" title="Ver/Ocultar en Mapa"
                                                 style="border-color: #E67E22; color: #E67E22;"><i
                                                     class="bi bi-eye-fill"></i></button>
                                         </div>
                                     </div>
                                     <div class="col-6 col-lg-3">
                                         <div class="card text-center p-2 border-danger bg-danger-subtle h-100">
-                                            <small data-bs-toggle="tooltip" title="25% de municipios con peor puntaje">Q4
+                                            <small data-bs-toggle="tooltip"
+                                                title="25% de municipios con peor puntaje">Q4
                                                 (Peor)</small>
                                             <div id="q4-count" class="fs-5 fw-bold text-danger">-</div>
-                                            <button class="btn btn-sm btn-outline-danger quartile-btn mt-1" id="q4-toggle"
-                                                data-bs-toggle="tooltip" title="Ver/Ocultar en Mapa"><i
+                                            <button class="btn btn-sm btn-outline-danger quartile-btn mt-1"
+                                                id="q4-toggle" data-bs-toggle="tooltip" title="Ver/Ocultar en Mapa"><i
                                                     class="bi bi-eye-fill"></i></button>
                                         </div>
                                     </div>
@@ -248,23 +476,9 @@
                     </div>
                 </div>
 
-                <!-- Fila de Reportes y Gráficos (debajo del mapa/calculadora) -->
+                <!-- Fila de Reportes (debajo del mapa/calculadora) -->
                 <div class="row mt-4">
                     <div class="col-12">
-                        <!-- Gráfico de distribución por entidad federativa -->
-                        <div class="card mb-4">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <h6 class="mb-0"><i class="bi bi-bar-chart-fill me-2"></i>Distribución de Cuartiles por
-                                    Entidad</h6>
-                                <button id="chart-toggle" class="btn btn-sm btn-outline-secondary">
-                                    <i class="bi bi-chevron-down me-1"></i>Mostrar
-                                </button>
-                            </div>
-                            <div class="card-body p-2" id="chart-container" style="display: none;">
-                                <div id="quartile-chart" style="width: 100%; height: 350px;"></div>
-                            </div>
-                        </div>
-
                         <!-- Reporte Descargable -->
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center">
@@ -301,8 +515,30 @@
         </div>
     </main>
 
+    <!-- Modal para Información de Indicadores -->
+    <div class="modal fade" id="modal-info-indicador" tabindex="-1" aria-labelledby="modalInfoIndicadorLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalInfoIndicadorLabel">Información del Indicador</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="indicador-info-content">
+                        <!-- El contenido se cargará dinámicamente -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal para Detalle de Entidad -->
-    <div class="modal fade" id="modal-detalle-entidad" tabindex="-1" aria-labelledby="modalDetalleEntidadLabel" aria-hidden="true">
+    <div class="modal fade" id="modal-detalle-entidad" tabindex="-1" aria-labelledby="modalDetalleEntidadLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -316,7 +552,8 @@
                         </div>
                         <div class="col-md-4">
                             <h6>Municipios en la Evaluación</h6>
-                            <div id="lista-detalle-municipios" style="max-height: 280px; overflow-y: auto; border: 1px solid #dee2e6; border-radius: 0.25rem;">
+                            <div id="lista-detalle-municipios"
+                                style="max-height: 280px; overflow-y: auto; border: 1px solid #dee2e6; border-radius: 0.25rem;">
                                 <!-- La lista de municipios se insertará aquí -->
                             </div>
                             <h6 class="mt-3">Totales por Cuartil</h6>
