@@ -987,7 +987,21 @@ body {
     filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(255, 255, 255, .3));
 }
 
-/* ---------- 9) Preloader ---------- */
+/* Clase para ocultar elementos */
+.oculto {
+    display: none !important;
+}
+
+.detalle-municipio-item:hover {
+    background-color: #f0f0f0;
+}
+
+.detalle-municipio-item.selected {
+    background-color: #e0e7ff !important;
+    font-weight: bold;
+}
+
+/* Estilos para el preloader */
 #preloader {
     position: fixed;
     inset: 0;
