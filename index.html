@@ -566,6 +566,15 @@
                     <div class="row">
                         <div class="col-md-8">
                             <div id="mapa-detalle" style="height: 500px; width: 100%; border-radius: 0.375rem;"></div>
+                            <!-- Indicadores y Pesos -->
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    <h6 class="mb-0"><i class="bi bi-sliders me-2"></i>Criterios de Evaluación</h6>
+                                </div>
+                                <div class="card-body p-2 small" id="modal-detalle-indicadores-pesos">
+                                    <!-- Content will be inserted here by JS -->
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <!-- Mejor y Peor Municipio -->
@@ -576,6 +585,14 @@
                                             <small class="text-success fw-bold">🏆 MEJOR</small>
                                             <div id="mejor-municipio-nombre" class="fw-bold" style="font-size: 0.85rem;">-</div>
                                             <div id="mejor-municipio-score" class="text-success fw-bold">-</div>
+                                            <div class="mt-1">
+                                                <small class="text-muted">🏠 Viviendas:</small>
+                                                <small id="mejor-municipio-viviendas" class="fw-bold text-primary">-</small>
+                                            </div>
+                                            <div class="mt-1">
+                                                <small class="text-muted">📍 Posición:</small>
+                                                <small id="mejor-municipio-posicion" class="fw-bold text-success">#-</small>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -585,6 +602,14 @@
                                             <small class="text-danger fw-bold">📉 PEOR</small>
                                             <div id="peor-municipio-nombre" class="fw-bold" style="font-size: 0.85rem;">-</div>
                                             <div id="peor-municipio-score" class="text-danger fw-bold">-</div>
+                                            <div class="mt-1">
+                                                <small class="text-muted">🏠 Viviendas:</small>
+                                                <small id="peor-municipio-viviendas" class="fw-bold text-primary">-</small>
+                                            </div>
+                                            <div class="mt-1">
+                                                <small class="text-muted">📍 Posición:</small>
+                                                <small id="peor-municipio-posicion" class="fw-bold text-danger">#-</small>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -598,6 +623,7 @@
                                 style="max-height: 200px; overflow-y: auto; border: 1px solid #dee2e6; border-radius: 0.25rem;">
                                 <!-- La lista de municipios se insertará aquí -->
                             </div>
+                            
                             <h6 class="mt-3">Totales por Cuartil</h6>
                             <div id="grafico-cuartiles-detalle" style="height: 180px; width: 100%;"></div>
                         </div>
