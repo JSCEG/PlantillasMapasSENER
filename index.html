@@ -626,6 +626,15 @@
                     <div class="row">
                         <div class="col-md-8">
                             <div id="mapa-cuartil-nacional" style="height: 500px; width: 100%; border-radius: 0.375rem;"></div>
+                            <!-- New section for indicators and weights moved here -->
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    <h6 class="mb-0"><i class="bi bi-sliders me-2"></i>Criterios de Evaluación</h6>
+                                </div>
+                                <div class="card-body p-2 small" id="modal-indicadores-pesos">
+                                    <!-- Content will be inserted here by JS -->
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <!-- Mejor y Peor Municipio Nacional -->
@@ -659,6 +668,15 @@
                             <div id="lista-municipios-cuartil-nacional"
                                 style="max-height: 300px; overflow-y: auto; border: 1px solid #dee2e6; border-radius: 0.25rem;">
                                 <!-- La lista de municipios se insertará aquí -->
+                            </div>
+                            <!-- New chart container -->
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    <h6 class="mb-0"><i class="bi bi-bar-chart-fill me-2"></i>Municipios por Entidad</h6>
+                                </div>
+                                <div class="card-body p-2">
+                                    <div id="chart-municipios-por-entidad" style="height: 200px; width: 100%;"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
