@@ -296,6 +296,28 @@ document.addEventListener('DOMContentLoaded', function () {
         'Subestaciones Eléctricas': '#7E1D37'  // Magenta Oscuro
     };
 
+    // Calcula cuartiles de un atributo numérico
+    function calculateQuartiles(features, property) {
+        const values = features
+            .map(f => f.properties && typeof f.properties[property] === 'number' ? f.properties[property] : null)
+            .filter(v => v !== null)
+            .sort((a, b) => a - b);
+        if (values.length === 0) return null;
+        const q1 = values[Math.floor(values.length * 0.25)];
+        const q2 = values[Math.floor(values.length * 0.5)];
+        const q3 = values[Math.floor(values.length * 0.75)];
+        return { q1, q2, q3 };
+    }
+
+    // Asigna colores según cuartiles
+    function getQuartileColor(value, quartiles) {
+        if (!quartiles) return '#ffffff';
+        if (value <= quartiles.q1) return '#fff5eb';
+        if (value <= quartiles.q2) return '#fee6ce';
+        if (value <= quartiles.q3) return '#fdd0a2';
+        return '#fdae6b';
+    }
+
     const overlayMaps = {};
     const activeLayers = new Set();
     const totalLayers = Object.keys(urls).length;
@@ -323,12 +345,25 @@ document.addEventListener('DOMContentLoaded', function () {
                 const isPointLayer = data.features.some(f => f.geometry.type === 'Point' || f.geometry.type === 'MultiPoint');
                 layerFeatureCounts[name] = Array.isArray(data.features) ? data.features.length : 0;
 
+                const quartiles = calculateQuartiles(data.features, 'valor');
+
+                const featureStyle = feature => {
+                    let base = { color: color, weight: 2 };
+                    if (quartiles && typeof feature.properties?.valor === 'number') {
+                        base.fillColor = getQuartileColor(feature.properties.valor, quartiles);
+                        base.fillOpacity = 0.6;
+                    }
+                    return base;
+                };
+
                 const geoJsonLayer = L.geoJSON(data, {
-                    style: () => {
-                        return { color: color, weight: 2 };
-                    },
+                    style: featureStyle,
                     pointToLayer: (feature, latlng) => {
-                        return L.circleMarker(latlng, { radius: 6, fillColor: color, color: '#fff', weight: 1, opacity: 1, fillOpacity: 0.8 });
+                        const opts = { radius: 6, fillColor: color, color: '#fff', weight: 1, opacity: 1, fillOpacity: 0.8 };
+                        if (quartiles && typeof feature.properties?.valor === 'number') {
+                            opts.fillColor = getQuartileColor(feature.properties.valor, quartiles);
+                        }
+                        return L.circleMarker(latlng, opts);
                     },
                     onEachFeature: (feature, layer) => {
                         if (feature.properties) {
@@ -339,6 +374,15 @@ document.addEventListener('DOMContentLoaded', function () {
                             popupContent += '</table></div>';
                             layer.bindPopup(popupContent, { maxHeight: 200 });
                         }
+                        layer.on({
+                            mouseover: e => {
+                                e.target.setStyle({ weight: 4 });
+                                if (!isPointLayer) e.target.bringToFront();
+                            },
+                            mouseout: e => {
+                                e.target.setStyle(featureStyle(feature));
+                            }
+                        });
                     }
                 });
 

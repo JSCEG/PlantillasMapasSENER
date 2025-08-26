@@ -112,6 +112,22 @@
                     </div>
                 </div>
             </div>
+            <div id="calculator-container" class="mt-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Calculadora Ponderada</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2 mb-2">
+                            <div class="col"><input type="number" step="0.01" class="form-control weight-input" placeholder="Peso 1"></div>
+                            <div class="col"><input type="number" step="0.01" class="form-control weight-input" placeholder="Peso 2"></div>
+                            <div class="col"><input type="number" step="0.01" class="form-control weight-input" placeholder="Peso 3"></div>
+                        </div>
+                        <button id="calc-btn" class="btn btn-primary">Verificar</button>
+                        <div id="calc-message" class="mt-2"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -182,6 +198,23 @@
 
     <!-- Custom JS (al final) -->
     <script src="mapa.js"></script>
+    <script>
+        document.getElementById('calc-btn').addEventListener('click', function () {
+            const inputs = document.querySelectorAll('.weight-input');
+            let sum = 0;
+            inputs.forEach(i => {
+                sum += parseFloat(i.value) || 0;
+            });
+            const msg = document.getElementById('calc-message');
+            if (Math.abs(sum - 1) < 0.001) {
+                msg.textContent = 'La suma ponderada es 1. Puede continuar.';
+                msg.className = 'text-success';
+            } else {
+                msg.textContent = `La suma de los pesos es ${sum.toFixed(2)}, debe ser 1.`;
+                msg.className = 'text-danger';
+            }
+        });
+    </script>
 
 </body>
 </body>
