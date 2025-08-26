@@ -1,0 +1,6 @@
+*.geojson filter=lfs diff=lfs merge=lfs -text
+*.topojson filter=lfs diff=lfs merge=lfs -text
+*.mbtiles filter=lfs diff=lfs merge=lfs -text
+*.js filter=lfs diff=lfs merge=lfs -text
+municipios.geojson filter=lfs diff=lfs merge=lfs -text
+indicadores/brillantes.js filter=lfs diff=lfs merge=lfs -text

@@ -1,0 +1,20 @@
+CVEGEO= Clave geoestadistica
+CVE_ENT= Clave de entidad
+CVE_MUN= Clave de municipio
+NOM_ENT= Nombre de entidad
+NOM_MUN= Nombre de municipio
+num_viven= Número de viviendas
+indice_ing= Índice de Ingreso
+indice_ele = Índice Eléctrico
+indice_pob= Índice de Pobreza Energética
+indice_soc= Índice Sociodemográfico
+indice_geo= Índice de Geotermia
+indice_pro= Índice de Problemas Eléctricos
+indice_act= Índice de Actividades Productivas
+indice_gen= Índice General de Precariedad (old)
+Indice_Pri= Índice Prioritario Por Estado
+indice_g_1= Índice Dinámico de Priorización Municipal (new)
+
+	
+
+	
