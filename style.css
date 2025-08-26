@@ -178,12 +178,164 @@ body {
 
 /* Small visual tweak for the card header to compress when body hidden */
 #impact-panel .card-header {
-    padding: .5rem .75rem;
+    padding: .4rem .6rem;
+    font-size: .9rem;
 }
 
 /* Add a subtle transition when showing/hiding the panel body */
 #impact-panel .card-body {
     transition: max-height .28s ease, opacity .22s ease;
+    padding: .5rem;
+}
+
+/* Compact calculator styles */
+#impact-panel .mb-2 {
+    margin-bottom: .25rem !important;
+}
+
+#impact-panel .mb-3 {
+    margin-bottom: .5rem !important;
+}
+
+#impact-panel .form-check {
+    margin-bottom: .25rem;
+}
+
+#impact-panel .btn-sm {
+    padding: .25rem .5rem;
+    font-size: .8rem;
+    min-height: 32px;
+}
+
+#impact-panel .d-flex.gap-2 {
+    gap: .5rem !important;
+}
+
+#impact-panel #quick-stats .card-body {
+    padding: .5rem;
+}
+
+#impact-panel #indicators-list {
+    margin-bottom: .5rem;
+}
+
+#impact-panel small {
+    font-size: .75rem;
+}
+
+/* Ultra-compact styling for dynamically generated indicators */
+#impact-panel #indicators-list .card {
+    padding: 0.4rem !important;
+    margin-bottom: 0.3rem !important;
+}
+
+#impact-panel #indicators-list .form-check {
+    margin-bottom: 0.2rem !important;
+}
+
+#impact-panel #indicators-list .form-check-label {
+    font-size: 0.75rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 0 !important;
+}
+
+#impact-panel #indicators-list .indicator-slider-container {
+    margin-top: 0.3rem !important;
+}
+
+#impact-panel #indicators-list .indicator-weight-input {
+    padding: 0.2rem 0.4rem !important;
+    font-size: 0.75rem !important;
+    height: auto !important;
+    min-height: 1.6rem !important;
+}
+
+#impact-panel #indicators-list .btn-link {
+    padding: 0 !important;
+    font-size: 0.7rem !important;
+}
+
+#impact-panel #indicators-list .row.g-3 {
+    --bs-gutter-x: 0.5rem !important;
+    --bs-gutter-y: 0.3rem !important;
+}
+
+#impact-panel #indicators-list .col-12.col-md-6 {
+    padding-left: 0.25rem !important;
+    padding-right: 0.25rem !important;
+}
+
+/* Compact indicators grid */
+#impact-panel #indicators-list .row {
+    margin: 0;
+    row-gap: .5rem;
+}
+
+#impact-panel #indicators-list .col-6 {
+    padding: 0 .25rem;
+}
+
+#impact-panel .indicator-item {
+    padding: .35rem;
+    margin-bottom: .15rem;
+    border-radius: .375rem;
+}
+
+#impact-panel .indicator-item .form-check {
+    margin-bottom: .15rem;
+}
+
+#impact-panel .indicator-item input[type="number"] {
+    padding: .25rem .5rem;
+    font-size: .8rem;
+    height: auto;
+}
+
+#impact-panel .indicator-item label {
+    font-size: .8rem;
+    margin-bottom: .15rem;
+}
+
+/* Compact form elements */
+#impact-panel .form-select-sm {
+    padding: .25rem .5rem;
+    font-size: .8rem;
+}
+
+#impact-panel .text-muted {
+    font-size: .7rem;
+}
+
+/* Ultra compact spacing */
+#impact-panel .d-flex.gap-2.mb-3 {
+    margin-bottom: .4rem !important;
+}
+
+#impact-panel #quick-stats {
+    margin-bottom: .4rem !important;
+}
+
+#impact-panel #impact-validation {
+    margin-bottom: .3rem !important;
+}
+
+#impact-panel .form-check-label {
+    font-size: .8rem;
+    line-height: 1.2;
+}
+
+#impact-panel .small {
+    font-size: .7rem !important;
+    line-height: 1.3;
+}
+
+/* Reduce vertical spacing in stats */
+#impact-panel #quick-stats .row {
+    margin: 0;
+}
+
+#impact-panel #quick-stats .col-6 {
+    padding: .1rem .25rem;
 }
 
 /* For very small screens ensure the panel sits flush above map */
@@ -1130,6 +1282,16 @@ html.dark body { ... }
     gap: 0.5rem;
     align-items: center;
     flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.main-footer .social-icons li,
+.site-footer .social-icons li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 /* Botón social base */
