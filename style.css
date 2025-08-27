@@ -357,6 +357,30 @@ body {
     }
 }
 
+/* ---------- Hover feedback for Top lists (Quick Stats and Quartiles) ---------- */
+.top-list li,
+.top5-item,
+.topQ-item {
+    cursor: pointer;
+    border-radius: 6px;
+    padding: 2px 6px;
+    transition: background-color .15s ease, transform .12s ease;
+}
+
+.top-list li:hover,
+.top5-item:hover,
+.topQ-item:hover {
+    background-color: rgba(32, 112, 91, 0.08); /* sutil verde institucional */
+    transform: translateY(-1px);
+}
+
+.top-list li:active,
+.top5-item:active,
+.topQ-item:active {
+    transform: translateY(0);
+    background-color: rgba(32, 112, 91, 0.14);
+}
+
 /* ---------- 3) Navbar institucional ---------- */
 .institutional-navbar {
     background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);

@@ -427,8 +427,15 @@
                     <!-- Columna 1: Resultados por Cuartil -->
                     <div class="col-lg-6">
                         <div class="card shadow-sm h-100">
-                            <div class="card-header">
+                            <div class="card-header d-flex justify-content-between align-items-center">
                                 <strong><i class="bi bi-grid-fill me-2"></i>Resultados por Cuartil</strong>
+                                <div class="d-flex align-items-center gap-2">
+                                    <small class="text-muted">Top</small>
+                                    <select id="topN-select" class="form-select form-select-sm" style="width:72px">
+                                        <option value="5" selected>5</option>
+                                        <option value="10">10</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="row g-3">
@@ -448,6 +455,18 @@
                                                     title="Ver Detalle Nacional"><i class="bi bi-search"></i>
                                                     Detalle</button>
                                             </div>
+                                            <div class="mt-2 small">
+                                                <div class="row g-1 text-start">
+                                                    <div class="col-6">
+                                                        <span class="text-success fw-bold">Mejores</span>
+                                                        <ul id="q1-top-best" class="list-unstyled mb-0 top-list"></ul>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <span class="text-danger fw-bold">Peores</span>
+                                                        <ul id="q1-top-worst" class="list-unstyled mb-0 top-list"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-6 col-lg-6">
@@ -464,6 +483,18 @@
                                                     id="q2-view" data-quartile="2" data-bs-toggle="tooltip"
                                                     title="Ver Detalle Nacional"><i class="bi bi-search"></i>
                                                     Detalle</button>
+                                            </div>
+                                            <div class="mt-2 small">
+                                                <div class="row g-1 text-start">
+                                                    <div class="col-6">
+                                                        <span class="text-success fw-bold">Mejores</span>
+                                                        <ul id="q2-top-best" class="list-unstyled mb-0 top-list"></ul>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <span class="text-danger fw-bold">Peores</span>
+                                                        <ul id="q2-top-worst" class="list-unstyled mb-0 top-list"></ul>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -485,6 +516,18 @@
                                                     style="background-color: #E67E22; color: white; border-color: #E67E22;"><i
                                                         class="bi bi-search"></i> Detalle</button>
                                             </div>
+                                            <div class="mt-2 small">
+                                                <div class="row g-1 text-start">
+                                                    <div class="col-6">
+                                                        <span class="text-success fw-bold">Mejores</span>
+                                                        <ul id="q3-top-best" class="list-unstyled mb-0 top-list"></ul>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <span class="text-danger fw-bold">Peores</span>
+                                                        <ul id="q3-top-worst" class="list-unstyled mb-0 top-list"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-6 col-lg-6">
@@ -502,6 +545,18 @@
                                                     id="q4-view" data-quartile="4" data-bs-toggle="tooltip"
                                                     title="Ver Detalle Nacional"><i class="bi bi-search"></i>
                                                     Detalle</button>
+                                            </div>
+                                            <div class="mt-2 small">
+                                                <div class="row g-1 text-start">
+                                                    <div class="col-6">
+                                                        <span class="text-success fw-bold">Mejores</span>
+                                                        <ul id="q4-top-best" class="list-unstyled mb-0 top-list"></ul>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <span class="text-danger fw-bold">Peores</span>
+                                                        <ul id="q4-top-worst" class="list-unstyled mb-0 top-list"></ul>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
