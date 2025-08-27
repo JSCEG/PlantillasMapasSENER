@@ -1748,3 +1748,55 @@ html.dark body { ... }
 #clear-all:hover i {
     opacity: 1;
 }
+
+/* Estilos para los marcadores Top 10 */
+.top-marker {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+    border: 2px solid white;
+}
+
+.top-marker-best {
+    background-color: #28a745; /* Verde */
+}
+
+.top-marker-worst {
+    background-color: #dc3545; /* Rojo */
+}
+
+.top-marker span {
+    line-height: 1;
+}
+
+.map-legend-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 8px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-top: none;
+    border-radius: 0 0 0.375rem 0.375rem;
+    font-size: 0.8rem;
+    margin-top: -1px; /* To align with map border */
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+}
+
+.legend-color-box {
+    width: 15px;
+    height: 15px;
+    border: 1px solid rgba(0,0,0,0.2);
+    margin-right: 6px;
+    display: inline-block;
+}

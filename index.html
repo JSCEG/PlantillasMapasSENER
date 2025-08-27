@@ -31,9 +31,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
 
     <!-- noUiSlider CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css"
-        integrity="sha512-qveKnGrvOChbSzAdtSs8p69eoLegyh+1hwOMbmpCViIwj7rn4oJjdmMvWOuyQlTOZgTlZA0N2PXA7iA8/2TUYA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="vendor/nouislider/nouislider.min.css" />
 
     <!-- DataTables CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
@@ -346,6 +344,19 @@
                                                         <strong id="worst-score" class="text-danger">-</strong>
                                                     </div>
                                                 </div>
+                                                <hr class="my-2">
+                                                <div class="row g-2">
+                                                    <div class="col-12 col-md-6">
+                                                        <small class="text-success fw-bold d-block mb-1">Top 5
+                                                            Mejores</small>
+                                                        <div id="top5-best" class="small"></div>
+                                                    </div>
+                                                    <div class="col-12 col-md-6">
+                                                        <small class="text-danger fw-bold d-block mb-1">Top 5
+                                                            Peores</small>
+                                                        <div id="top5-worst" class="small"></div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -355,7 +366,8 @@
                                                 title="Ajusta los pesos para que sumen 1.0">
                                                 <i class="bi bi-distribute-vertical me-1"></i>Normalizar
                                             </button>
-                                            <button type="button" id="apply-impact" class="btn btn-sm btn-primary">
+                                            <button type="button" id="apply-impact" class="btn btn-sm btn-primary"
+                                                disabled>
                                                 <i class="bi bi-check-circle-fill me-1"></i>Aplicar
                                             </button>
                                             <button type="button" id="clear-all"
@@ -391,99 +403,105 @@
                 <div class="col-lg-7 col-xl-8">
                     <div id="map-container" style="position: relative;">
                         <div id="map" style="width:100%; height:80vh; min-height:500px; border-radius: 0.375rem;"></div>
-                    </div>
-
-                    <!-- Gráfico de distribución por entidad (abajo del mapa) -->
-                    <div id="resultados-chart-container" class="mt-3 oculto">
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <h6 class="mb-0"><i class="bi bi-bar-chart-fill me-2"></i>Distribución por Entidad</h6>
-                                <button id="chart-toggle" class="btn btn-sm btn-outline-secondary">
-                                    <i class="bi bi-chevron-up me-1"></i>Ocultar
-                                </button>
-                            </div>
-                            <div class="card-body p-2" id="chart-container">
-                                <div id="quartile-chart" style="width: 100%; height: 300px;"></div>
-                                <small class="text-muted d-block mt-2 text-center">
-                                    <i class="bi bi-info-circle me-1"></i>Haz clic en una barra para ver el detalle de
-                                    la entidad
-                                </small>
-                            </div>
+                        <div id="map-legend" class="map-legend-container oculto">
+                            <div class="legend-item"><span class="legend-color-box"
+                                    style="background-color: #2ECC71;"></span> Q1 (Mejor)</div>
+                            <div class="legend-item"><span class="legend-color-box"
+                                    style="background-color: #F1C40F;"></span> Q2</div>
+                            <div class="legend-item"><span class="legend-color-box"
+                                    style="background-color: #E67E22;"></span> Q3</div>
+                            <div class="legend-item"><span class="legend-color-box"
+                                    style="background-color: #C0392B;"></span> Q4 (Peor)</div>
+                            <div class="legend-item"><span class="legend-color-box"
+                                    style="background-color: #6c757d;"></span> Sin Datos</div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Contenedor de todos los resultados -->
-            <div id="resultados-container" class="oculto">
+            <div id="resultados-container" class="mt-4 oculto">
 
-                <!-- Fila de Resultados por Cuartil -->
-                <div class="row mt-4" id="quartile-results-row">
-                    <div class="col-12">
-                        <div class="card shadow-sm u-ani-rise">
+                <!-- Fila de Resultados y Gráfico en 2 Columnas -->
+                <div class="row g-4">
+                    <!-- Columna 1: Resultados por Cuartil -->
+                    <div class="col-lg-6">
+                        <div class="card shadow-sm h-100">
                             <div class="card-header">
                                 <strong><i class="bi bi-grid-fill me-2"></i>Resultados por Cuartil</strong>
                             </div>
                             <div class="card-body">
                                 <div class="row g-3">
-                                    <div class="col-6 col-lg-3">
+                                    <div class="col-6 col-lg-6">
                                         <div class="card text-center p-2 border-success bg-success-subtle h-100">
                                             <small data-bs-toggle="tooltip"
                                                 title="25% de municipios con mejor puntaje">Q1
                                                 (Mejor)</small>
                                             <div id="q1-count" class="fs-5 fw-bold text-success">-</div>
                                             <div class="d-flex gap-1 justify-content-center mt-1">
-                                                <button class="btn btn-sm btn-outline-success quartile-btn"
-                                                    id="q1-toggle" data-bs-toggle="tooltip" title="Ver/Ocultar en Mapa"><i
-                                                        class="bi bi-eye-fill"></i></button>
-                                                <button class="btn btn-sm btn-success quartile-view-btn"
-                                                    id="q1-view" data-quartile="1" data-bs-toggle="tooltip" title="Ver Detalle Nacional">Ver</button>
+                                                <button class="btn btn-sm btn-outline-success quartile-btn" disabled
+                                                    id="q1-toggle" data-bs-toggle="tooltip"
+                                                    title="Resaltar los municipios de este cuartil en el mapa principal"><i
+                                                        class="bi bi-pin-map"></i> Mapa</button>
+                                                <button class="btn btn-sm btn-success quartile-view-btn" disabled
+                                                    id="q1-view" data-quartile="1" data-bs-toggle="tooltip"
+                                                    title="Ver Detalle Nacional"><i class="bi bi-search"></i>
+                                                    Detalle</button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-6 col-lg-3">
+                                    <div class="col-6 col-lg-6">
                                         <div class="card text-center p-2 border-warning bg-warning-subtle h-100">
                                             <small data-bs-toggle="tooltip"
                                                 title="Municipios entre el 25% y 50% de puntaje">Q2</small>
                                             <div id="q2-count" class="fs-5 fw-bold text-warning">-</div>
                                             <div class="d-flex gap-1 justify-content-center mt-1">
-                                                <button class="btn btn-sm btn-outline-warning quartile-btn"
-                                                    id="q2-toggle" data-bs-toggle="tooltip" title="Ver/Ocultar en Mapa"><i
-                                                        class="bi bi-eye-fill"></i></button>
-                                                <button class="btn btn-sm btn-warning quartile-view-btn"
-                                                    id="q2-view" data-quartile="2" data-bs-toggle="tooltip" title="Ver Detalle Nacional">Ver</button>
+                                                <button class="btn btn-sm btn-outline-warning quartile-btn" disabled
+                                                    id="q2-toggle" data-bs-toggle="tooltip"
+                                                    title="Resaltar los municipios de este cuartil en el mapa principal"><i
+                                                        class="bi bi-pin-map"></i> Mapa</button>
+                                                <button class="btn btn-sm btn-warning quartile-view-btn" disabled
+                                                    id="q2-view" data-quartile="2" data-bs-toggle="tooltip"
+                                                    title="Ver Detalle Nacional"><i class="bi bi-search"></i>
+                                                    Detalle</button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-6 col-lg-3">
+                                    <div class="col-6 col-lg-6">
                                         <div class="card text-center p-2 h-100"
                                             style="border-color: #E67E22; background-color: #fcebd8;">
                                             <small data-bs-toggle="tooltip"
                                                 title="Municipios entre el 50% y 75% de puntaje">Q3</small>
                                             <div id="q3-count" class="fs-5 fw-bold" style="color: #E67E22;">-</div>
                                             <div class="d-flex gap-1 justify-content-center mt-1">
-                                                <button class="btn btn-sm quartile-btn" id="q3-toggle"
-                                                    data-bs-toggle="tooltip" title="Ver/Ocultar en Mapa"
+                                                <button class="btn btn-sm quartile-btn" id="q3-toggle" disabled
+                                                    data-bs-toggle="tooltip"
+                                                    title="Resaltar los municipios de este cuartil en el mapa principal"
                                                     style="border-color: #E67E22; color: #E67E22;"><i
-                                                        class="bi bi-eye-fill"></i></button>
-                                                <button class="btn btn-sm quartile-view-btn"
-                                                    id="q3-view" data-quartile="3" data-bs-toggle="tooltip" title="Ver Detalle Nacional"
-                                                    style="background-color: #E67E22; color: white; border-color: #E67E22;">Ver</button>
+                                                        class="bi bi-pin-map"></i> Mapa</button>
+                                                <button class="btn btn-sm quartile-view-btn" disabled id="q3-view"
+                                                    data-quartile="3" data-bs-toggle="tooltip"
+                                                    title="Ver Detalle Nacional"
+                                                    style="background-color: #E67E22; color: white; border-color: #E67E22;"><i
+                                                        class="bi bi-search"></i> Detalle</button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-6 col-lg-3">
+                                    <div class="col-6 col-lg-6">
                                         <div class="card text-center p-2 border-danger bg-danger-subtle h-100">
                                             <small data-bs-toggle="tooltip"
                                                 title="25% de municipios con peor puntaje">Q4
                                                 (Peor)</small>
                                             <div id="q4-count" class="fs-5 fw-bold text-danger">-</div>
                                             <div class="d-flex gap-1 justify-content-center mt-1">
-                                                <button class="btn btn-sm btn-outline-danger quartile-btn"
-                                                    id="q4-toggle" data-bs-toggle="tooltip" title="Ver/Ocultar en Mapa"><i
-                                                        class="bi bi-eye-fill"></i></button>
-                                                <button class="btn btn-sm btn-danger quartile-view-btn"
-                                                    id="q4-view" data-quartile="4" data-bs-toggle="tooltip" title="Ver Detalle Nacional">Ver</button>
+                                                <button class="btn btn-sm btn-outline-danger quartile-btn" disabled
+                                                    id="q4-toggle" data-bs-toggle="tooltip"
+                                                    title="Resaltar los municipios de este cuartil en el mapa principal"><i
+                                                        class="bi bi-pin-map"></i> Mapa</button>
+                                                <button class="btn btn-sm btn-danger quartile-view-btn" disabled
+                                                    id="q4-view" data-quartile="4" data-bs-toggle="tooltip"
+                                                    title="Ver Detalle Nacional"><i class="bi bi-search"></i>
+                                                    Detalle</button>
                                             </div>
                                         </div>
                                     </div>
@@ -491,9 +509,32 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Columna 2: Gráfico de Distribución -->
+                    <div class="col-lg-6">
+                        <div id="resultados-chart-container" class="h-100">
+                            <div class="card h-100">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0"><i class="bi bi-bar-chart-fill me-2"></i>Distribución por Entidad
+                                    </h6>
+                                    <button id="chart-toggle" class="btn btn-sm btn-outline-secondary">
+                                        <i class="bi bi-chevron-up me-1"></i>Ocultar
+                                    </button>
+                                </div>
+                                <div class="card-body p-2" id="chart-container">
+                                    <div id="quartile-chart" style="width: 100%; height: 300px;"></div>
+                                    <small class="text-muted d-block mt-2 text-center">
+                                        <i class="bi bi-info-circle me-1"></i>Haz clic en una barra para ver el detalle
+                                        de
+                                        la entidad
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Fila de Reportes (debajo del mapa/calculadora) -->
+                <!-- Fila de Reportes (debajo) -->
                 <div class="row mt-4">
                     <div class="col-12">
                         <!-- Reporte Descargable -->
@@ -570,10 +611,12 @@
                                 <div class="col-md-7">
                                     <div class="card h-100">
                                         <div class="card-header">
-                                            <h6 class="mb-0"><i class="bi bi-bar-chart-fill me-2"></i>Totales por Cuartil</h6>
+                                            <h6 class="mb-0"><i class="bi bi-bar-chart-fill me-2"></i>Totales por
+                                                Cuartil</h6>
                                         </div>
                                         <div class="card-body p-2">
-                                            <div id="grafico-cuartiles-detalle" style="height: 200px; width: 100%;"></div>
+                                            <div id="grafico-cuartiles-detalle" style="height: 200px; width: 100%;">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -581,9 +624,11 @@
                                 <div class="col-md-5">
                                     <div class="card h-100">
                                         <div class="card-header">
-                                            <h6 class="mb-0"><i class="bi bi-sliders me-2"></i>Criterios de Evaluación</h6>
+                                            <h6 class="mb-0"><i class="bi bi-sliders me-2"></i>Criterios de Evaluación
+                                            </h6>
                                         </div>
-                                        <div class="card-body p-2 small" id="modal-detalle-indicadores-pesos" style="overflow-y: auto; max-height: 200px;">
+                                        <div class="card-body p-2 small" id="modal-detalle-indicadores-pesos"
+                                            style="overflow-y: auto; max-height: 200px;">
                                             <!-- Content will be inserted here by JS -->
                                         </div>
                                     </div>
@@ -597,15 +642,18 @@
                                     <div class="card border-success bg-success-subtle h-100">
                                         <div class="card-body p-2 text-center">
                                             <small class="text-success fw-bold">🏆 MEJOR</small>
-                                            <div id="mejor-municipio-nombre" class="fw-bold" style="font-size: 0.85rem;">-</div>
+                                            <div id="mejor-municipio-nombre" class="fw-bold"
+                                                style="font-size: 0.85rem;">-</div>
                                             <div id="mejor-municipio-score" class="text-success fw-bold">-</div>
                                             <div class="mt-1">
                                                 <small class="text-muted">🏠 Viviendas:</small>
-                                                <small id="mejor-municipio-viviendas" class="fw-bold text-primary">-</small>
+                                                <small id="mejor-municipio-viviendas"
+                                                    class="fw-bold text-primary">-</small>
                                             </div>
                                             <div class="mt-1">
                                                 <small class="text-muted">📍 Posición:</small>
-                                                <small id="mejor-municipio-posicion" class="fw-bold text-success">#-</small>
+                                                <small id="mejor-municipio-posicion"
+                                                    class="fw-bold text-success">#-</small>
                                             </div>
                                         </div>
                                     </div>
@@ -614,21 +662,24 @@
                                     <div class="card border-danger bg-danger-subtle h-100">
                                         <div class="card-body p-2 text-center">
                                             <small class="text-danger fw-bold">📉 PEOR</small>
-                                            <div id="peor-municipio-nombre" class="fw-bold" style="font-size: 0.85rem;">-</div>
+                                            <div id="peor-municipio-nombre" class="fw-bold" style="font-size: 0.85rem;">
+                                                -</div>
                                             <div id="peor-municipio-score" class="text-danger fw-bold">-</div>
                                             <div class="mt-1">
                                                 <small class="text-muted">🏠 Viviendas:</small>
-                                                <small id="peor-municipio-viviendas" class="fw-bold text-primary">-</small>
+                                                <small id="peor-municipio-viviendas"
+                                                    class="fw-bold text-primary">-</small>
                                             </div>
                                             <div class="mt-1">
                                                 <small class="text-muted">📍 Posición:</small>
-                                                <small id="peor-municipio-posicion" class="fw-bold text-danger">#-</small>
+                                                <small id="peor-municipio-posicion"
+                                                    class="fw-bold text-danger">#-</small>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <h6 class="mb-0">Municipios en la Evaluación</h6>
                                 <span id="badge-total-municipios" class="badge bg-primary">0</span>
@@ -662,16 +713,19 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-8">
-                            <div id="mapa-cuartil-nacional" style="height: 500px; width: 100%; border-radius: 0.375rem;"></div>
+                            <div id="mapa-cuartil-nacional"
+                                style="height: 500px; width: 100%; border-radius: 0.375rem;"></div>
                             <div class="row mt-3">
                                 <!-- Gráfico de Barras -->
                                 <div class="col-md-7">
                                     <div class="card h-100">
                                         <div class="card-header">
-                                            <h6 class="mb-0"><i class="bi bi-bar-chart-fill me-2"></i>Municipios por Entidad</h6>
+                                            <h6 class="mb-0"><i class="bi bi-bar-chart-fill me-2"></i>Municipios por
+                                                Entidad</h6>
                                         </div>
                                         <div class="card-body p-2">
-                                            <div id="chart-municipios-por-entidad" style="height: 200px; width: 100%;"></div>
+                                            <div id="chart-municipios-por-entidad" style="height: 200px; width: 100%;">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -679,9 +733,11 @@
                                 <div class="col-md-5">
                                     <div class="card h-100">
                                         <div class="card-header">
-                                            <h6 class="mb-0"><i class="bi bi-sliders me-2"></i>Criterios de Evaluación</h6>
+                                            <h6 class="mb-0"><i class="bi bi-sliders me-2"></i>Criterios de Evaluación
+                                            </h6>
                                         </div>
-                                        <div class="card-body p-2 small" id="modal-indicadores-pesos" style="overflow-y: auto; max-height: 200px;">
+                                        <div class="card-body p-2 small" id="modal-indicadores-pesos"
+                                            style="overflow-y: auto; max-height: 200px;">
                                             <!-- Content will be inserted here by JS -->
                                         </div>
                                     </div>
@@ -695,12 +751,14 @@
                                     <div class="card h-100" id="mejor-municipio-nacional-card">
                                         <div class="card-body p-2 text-center">
                                             <small class="fw-bold">🏆 MEJOR NACIONAL</small>
-                                            <div id="mejor-municipio-nacional-nombre" class="fw-bold" style="font-size: 0.85rem;">-</div>
+                                            <div id="mejor-municipio-nacional-nombre" class="fw-bold"
+                                                style="font-size: 0.85rem;">-</div>
                                             <div id="mejor-municipio-nacional-score" class="fw-bold">-</div>
                                             <small id="mejor-municipio-nacional-estado" class="text-muted">-</small>
                                             <div class="mt-1">
                                                 <small class="text-muted">🏠 Viviendas:</small>
-                                                <small id="mejor-municipio-nacional-viviendas" class="fw-bold text-primary">-</small>
+                                                <small id="mejor-municipio-nacional-viviendas"
+                                                    class="fw-bold text-primary">-</small>
                                             </div>
                                         </div>
                                     </div>
@@ -709,18 +767,20 @@
                                     <div class="card h-100" id="peor-municipio-nacional-card">
                                         <div class="card-body p-2 text-center">
                                             <small class="fw-bold">📉 PEOR NACIONAL</small>
-                                            <div id="peor-municipio-nacional-nombre" class="fw-bold" style="font-size: 0.85rem;">-</div>
+                                            <div id="peor-municipio-nacional-nombre" class="fw-bold"
+                                                style="font-size: 0.85rem;">-</div>
                                             <div id="peor-municipio-nacional-score" class="fw-bold">-</div>
                                             <small id="peor-municipio-nacional-estado" class="text-muted">-</small>
                                             <div class="mt-1">
                                                 <small class="text-muted">🏠 Viviendas:</small>
-                                                <small id="peor-municipio-nacional-viviendas" class="fw-bold text-primary">-</small>
+                                                <small id="peor-municipio-nacional-viviendas"
+                                                    class="fw-bold text-primary">-</small>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <h6 class="mb-0">Municipios del Cuartil <span id="numero-cuartil-actual">-</span></h6>
                                 <span id="badge-total-municipios-cuartil" class="badge bg-primary">0</span>
@@ -839,9 +899,7 @@
         src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
 
     <!-- noUiSlider JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"
-        integrity="sha512-UOJe4paV6hYWBnS0c9GnIRH8PLm2nFK22uhfAvsTIqd3uwnAadVftNlJVzvv9hYI1e8OLOgPFrksOunVICmrA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="vendor/nouislider/nouislider.min.js"></script>
 
     <!-- Scripts de la aplicación -->
     <script src="mapa.js"></script>
