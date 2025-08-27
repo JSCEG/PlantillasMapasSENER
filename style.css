@@ -1729,6 +1729,40 @@ html.dark body { ... }
     height: 24px;
 }
 
+/* Compact noUiSlider inside the Impact panel */
+#impact-panel .noUi-target {
+    height: 8px;
+    /* thinner track */
+}
+
+#impact-panel .noUi-handle.noUi-handle-lower,
+#impact-panel .noUi-handle.noUi-handle-upper {
+    width: 16px;
+    height: 16px;
+    right: -8px;
+    top: -4px;
+}
+
+#impact-panel #indicators-list .indicator-slider-container {
+    gap: .5rem;
+}
+
+#impact-panel #indicators-list .indicator-weight-input {
+    width: 56px;
+}
+
+/* Disabled state appearance for sliders/inputs inside impact panel */
+#impact-panel .noUi-target[disabled] {
+    opacity: 0.5;
+    filter: grayscale(0.2);
+    pointer-events: none;
+}
+
+#impact-panel .indicator-weight-input:disabled {
+    opacity: 0.6;
+    background-color: #f1f3f5;
+}
+
 /* Custom container for slider + input */
 .indicator-slider-container {
     display: flex;
