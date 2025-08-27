@@ -370,7 +370,8 @@ body {
 .top-list li:hover,
 .top5-item:hover,
 .topQ-item:hover {
-    background-color: rgba(32, 112, 91, 0.08); /* sutil verde institucional */
+    background-color: rgba(32, 112, 91, 0.08);
+    /* sutil verde institucional */
     transform: translateY(-1px);
 }
 
@@ -1773,29 +1774,54 @@ html.dark body { ... }
     opacity: 1;
 }
 
-/* Estilos para los marcadores Top 10 */
+/* Estilos para los marcadores Top N */
 .top-marker {
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 50%;
-    color: white;
-    font-weight: bold;
+    color: #fff;
+    font-weight: 700;
     font-size: 12px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.4);
-    border: 2px solid white;
+    line-height: 1;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+    border: 2px solid #fff;
+    cursor: pointer;
+    user-select: none;
+    transition: filter .15s ease, box-shadow .15s ease;
 }
 
 .top-marker-best {
-    background-color: #28a745; /* Verde */
+    background-color: #28a745;
+    /* Verde */
 }
 
 .top-marker-worst {
-    background-color: #dc3545; /* Rojo */
+    background-color: #dc3545;
+    /* Rojo */
 }
 
 .top-marker span {
     line-height: 1;
+}
+
+/* Hover y pulso para mejorar feedback visual */
+.top-marker:hover {
+    filter: brightness(1.12);
+}
+
+.top-marker.pulse {
+    animation: markerGlow 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes markerGlow {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.0), 0 2px 6px rgba(0, 0, 0, 0.25);
+    }
+
+    100% {
+        box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.28), 0 6px 14px rgba(0, 0, 0, 0.35);
+    }
 }
 
 .map-legend-container {
@@ -1809,7 +1835,8 @@ html.dark body { ... }
     border-top: none;
     border-radius: 0 0 0.375rem 0.375rem;
     font-size: 0.8rem;
-    margin-top: -1px; /* To align with map border */
+    margin-top: -1px;
+    /* To align with map border */
 }
 
 .legend-item {
@@ -1820,7 +1847,7 @@ html.dark body { ... }
 .legend-color-box {
     width: 15px;
     height: 15px;
-    border: 1px solid rgba(0,0,0,0.2);
+    border: 1px solid rgba(0, 0, 0, 0.2);
     margin-right: 6px;
     display: inline-block;
 }
