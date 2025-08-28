@@ -1197,6 +1197,11 @@ body {
     animation: fadeInUp .5s ease-out !important;
 }
 
+/* Asegurar que no haya scroll en el contenedor principal cuando está colapsado */
+.leaflet-control-layers:not(.leaflet-control-layers-expanded) {
+    overflow: hidden !important;
+}
+
 .leaflet-control-layers-toggle {
     background: rgba(255, 255, 255, .95) !important;
     border-radius: 12px !important;
@@ -1232,11 +1237,14 @@ body {
     min-width: 280px !important;
     max-height: 400px !important;
     overflow-y: auto !important;
+    overflow-x: hidden !important;
 }
 
 .leaflet-control-layers-base,
 .leaflet-control-layers-overlays {
     margin-bottom: 15px !important;
+    overflow: visible !important;
+    max-height: none !important;
 }
 
 .leaflet-control-layers-separator {
@@ -1273,6 +1281,43 @@ body {
     margin-right: 10px !important;
     transform: scale(1.2) !important;
     accent-color: var(--color-verde-profundo) !important;
+}
+
+/* Prevenir doble scroll en el control de capas */
+.leaflet-control-layers-form {
+    overflow: visible !important;
+    max-height: none !important;
+}
+
+.leaflet-control-layers-list {
+    overflow: visible !important;
+    max-height: none !important;
+}
+
+/* Asegurar que los elementos internos no generen scroll propio */
+.leaflet-control-layers-base>*,
+.leaflet-control-layers-overlays>* {
+    overflow: visible !important;
+}
+
+/* Personalizar scrollbar del control de capas */
+.leaflet-control-layers-expanded::-webkit-scrollbar {
+    width: 6px;
+}
+
+.leaflet-control-layers-expanded::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+}
+
+.leaflet-control-layers-expanded::-webkit-scrollbar-thumb {
+    background: var(--color-verde-profundo);
+    border-radius: 3px;
+    opacity: 0.7;
+}
+
+.leaflet-control-layers-expanded::-webkit-scrollbar-thumb:hover {
+    background: var(--color-burdeos-oscuro);
 }
 
 .leaflet-control-zoom {
