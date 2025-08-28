@@ -416,6 +416,65 @@
                                     style="background-color: #6c757d;"></span> Sin Datos</div>
                         </div>
                     </div>
+
+                    <!-- Leyendas de Rasters debajo del mapa -->
+                    <div class="row mt-3">
+                        <div class="col-12 d-flex flex-wrap align-items-start gap-3">
+                            <div>
+                                <div id="simbol-fotovoltaico" class="color-ramp-container" style="display:none;">
+                                    <div class="color-ramp-title">Potencial fotovoltaico [kWh/kWp] Fuente: <a
+                                            href='https://globalsolaratlas.info/download/world'
+                                            target='_blank'>globalsolaratlas.info</a></div>
+                                    <div class="color-gradient-bar fotovoltaico-gradient"></div>
+                                    <div class="color-labels values">
+                                        <span>3.22</span><span>3.63</span><span>4.04</span><span>4.44</span><span>4.85</span><span>5.26</span><span>5.67</span>
+                                    </div>
+                                    <div class="color-labels categories">
+                                        <span>Bajo</span><span></span><span>Moderado</span><span></span><span>Bueno</span><span>Alto</span><span>Muy
+                                            alto</span>
+                                    </div>
+                                </div>
+
+                                <div id="simbol-radiacion" class="color-ramp-container" style="display:none;">
+                                    <div class="color-ramp-title">Radiación horizontal [kWh/m²] Fuente: <a
+                                            href='https://globalsolaratlas.info/download/world'
+                                            target='_blank'>globalsolaratlas.info</a></div>
+                                    <div class="color-gradient-bar radiacion-gradient"></div>
+                                    <div class="color-labels values">
+                                        <span>3.58</span><span>3.99</span><span>4.39</span><span>4.8</span><span>5.2</span><span>5.61</span><span>6.01</span><span>6.42</span>
+                                    </div>
+                                    <div class="color-labels categories">
+                                        <span>Bajo</span><span></span><span>Moderado</span><span></span><span>Bueno</span><span></span><span>Alto</span><span>Muy
+                                            alto</span>
+                                    </div>
+                                </div>
+
+                                <div id="simbol-viento-50m" class="color-ramp-container" style="display:none;">
+                                    <div class="color-ramp-title">Velocidad de viento a 50m [m/s] Fuente: <a
+                                            href='https://globalwindatlas.info/es/download/gis-files'
+                                            target='_blank'>globalwindatlas.info</a></div>
+                                    <div class="color-gradient-bar viento-gradient"></div>
+                                    <div class="color-labels values">
+                                        <span>&lt;3</span><span>6</span><span>9</span><span>12</span><span>15&lt;</span>
+                                    </div>
+                                    <div class="color-ramp-description">La velocidad del viento se incrementa conforme
+                                        aumenta la altura, hay más densidad y potencial aprovechable.</div>
+                                </div>
+
+                                <div id="simbol-viento-100m" class="color-ramp-container" style="display:none;">
+                                    <div class="color-ramp-title">Velocidad de viento a 100m [m/s] Fuente: <a
+                                            href='https://globalwindatlas.info/es/download/gis-files'
+                                            target='_blank'>globalwindatlas.info</a></div>
+                                    <div class="color-gradient-bar viento-gradient-100m"></div>
+                                    <div class="color-labels values">
+                                        <span>&lt;3</span><span>6</span><span>9</span><span>12</span><span>15&lt;</span>
+                                    </div>
+                                    <div class="color-ramp-description">A mayor altura, mayor velocidad del viento y
+                                        mejor potencial para generación eólica.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
