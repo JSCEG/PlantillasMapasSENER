@@ -2223,3 +2223,7 @@ html.dark body { ... }
     margin-right: 6px;
     display: inline-block;
 }
+
+h1 {
+    color: #111;
+}

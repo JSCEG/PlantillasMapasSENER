@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Geovisor SENER - Evaluación de Impacto Social</title>
+    <title style="color:#333 !important;">Geovisor SENER - Evaluación de Impacto Social</title>
 
     <!-- Google Fonts: Montserrat -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -59,6 +59,18 @@
             border-bottom: 2px solid var(--color-verde-profundo);
         }
 
+        .evaluation-card .card-header h3 {
+            color: #333 !important;
+        }
+
+        .evaluation-card .card-body {
+            color: #333 !important;
+        }
+
+        .evaluation-card .card-text {
+            color: #555 !important;
+        }
+
         .evaluation-card .btn {
             transition: all 0.3s ease;
         }
@@ -76,8 +88,13 @@
             align-items: center;
             justify-content: center;
             margin: 0 auto 1rem;
-            color: white;
+            color: white !important;
             font-size: 2rem;
+        }
+
+        .methodology-section h5,
+        .methodology-section p {
+            color: #333 !important;
         }
 
         .methodology-section {
@@ -95,7 +112,11 @@
         .stats-number {
             font-size: 2.5rem;
             font-weight: 700;
-            color: var(--color-verde-profundo);
+            color: var(--color-verde-profundo) !important;
+        }
+
+        .stats-card small {
+            color: #666 !important;
         }
 
         /* Animaciones */
@@ -104,6 +125,7 @@
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -122,12 +144,70 @@
             animation: fadeInUp 0.6s ease-out 0.4s both;
         }
 
+        /* Asegurar legibilidad de textos */
+        .card-body,
+        .card-text,
+        .card p,
+        .card li {
+            color: #333 !important;
+        }
+
+        .text-muted {
+            color: #666 !important;
+        }
+
+        .lead {
+            color: #555 !important;
+        }
+
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: #333 !important;
+        }
+
+        .alert-light {
+            color: #333 !important;
+            background-color: #f8f9fa !important;
+        }
+
+        .alert-light .alert-heading {
+            color: #333 !important;
+        }
+
+        /* Iconos con colores específicos */
+        .feature-icon.bg-primary {
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%) !important;
+        }
+
+        .feature-icon.bg-warning {
+            background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%) !important;
+        }
+
+        .feature-icon.bg-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+        }
+
+        .feature-icon.bg-info {
+            background: linear-gradient(135deg, #0dcaf0 0%, #31d2f2 100%) !important;
+        }
+
+        .feature-icon.bg-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%) !important;
+        }
+
+        .feature-icon.bg-success {
+            background: linear-gradient(135deg, #198754 0%, #157347 100%) !important;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .hero-section h1 {
                 font-size: 2rem;
             }
-            
+
             .hero-section p {
                 font-size: 1rem;
             }
@@ -166,14 +246,14 @@
                     <div class="col-lg-8 fade-in-up">
                         <h1>Evaluación de Impacto Social</h1>
                         <p class="lead">
-                            Herramienta integral para el análisis y evaluación del impacto social en el desarrollo 
+                            Herramienta integral para el análisis y evaluación del impacto social en el desarrollo
                             de proyectos energéticos a nivel nacional y por entidad federativa.
                         </p>
                         <div class="d-flex gap-3 flex-wrap">
-                            <a href="#evaluaciones" class="btn btn-light btn-lg">
+                            <a href="#evaluaciones" class="btn btn-dark btn-lg">
                                 <i class="bi bi-arrow-down me-2"></i>Comenzar Evaluación
                             </a>
-                            <a href="#metodologia" class="btn btn-outline-light btn-lg">
+                            <a href="#metodologia" class="btn btn-outline-dark btn-lg">
                                 <i class="bi bi-info-circle me-2"></i>Conocer Metodología
                             </a>
                         </div>
@@ -232,36 +312,36 @@
                     <div class="card evaluation-card shadow-sm">
                         <div class="card-header text-center py-4">
                             <div class="feature-icon">
-                                <i class="bi bi-map"></i>
+                                <i class="bi bi-map" style="color:#333"></i>
                             </div>
                             <h3 class="h4 fw-bold mb-0">Evaluación Nacional</h3>
                         </div>
                         <div class="card-body p-4">
                             <p class="card-text mb-4">
-                                Análisis completo de impacto social a nivel nacional. Evalúa todos los municipios 
+                                Análisis completo de impacto social a nivel nacional. Evalúa todos los municipios
                                 de México utilizando indicadores socioeconómicos y demográficos.
                             </p>
-                            
+
                             <div class="mb-4">
-                                <h6 class="fw-bold mb-3">
+                                <h6 class="fw-bold mb-3" style="color: #333 !important;">
                                     <i class="bi bi-check-circle-fill text-success me-2"></i>Características:
                                 </h6>
                                 <ul class="list-unstyled">
-                                    <li class="mb-2">
+                                    <li class="mb-2" style="color: #333 !important;">
                                         <i class="bi bi-arrow-right text-primary me-2"></i>
                                         Cobertura completa de 2,469 municipios
                                     </li>
-                                    <li class="mb-2">
+                                    <li class="mb-2" style="color: #333 !important;">
                                         <i class="bi bi-arrow-right text-primary me-2"></i>
                                         Comparación entre todas las entidades federativas
                                     </li>
-                                    <li class="mb-2">
+                                    <li class="mb-2" style="color: #333 !important;">
                                         <i class="bi bi-arrow-right text-primary me-2"></i>
                                         Cuartiles calculados a nivel nacional
                                     </li>
-                                    <li class="mb-2">
-                                        <i class="bi bi-arrow-right text-primary me-2"></i>
-                                        Reportes y gráficos interactivos
+                                    <li class="mb-2" style="color: #333 !important;"></li>
+                                    <i class="bi bi-arrow-right text-primary me-2"></i>
+                                    Reportes y gráficos interactivos
                                     </li>
                                 </ul>
                             </div>
@@ -281,36 +361,36 @@
                     <div class="card evaluation-card shadow-sm">
                         <div class="card-header text-center py-4">
                             <div class="feature-icon">
-                                <i class="bi bi-geo-alt"></i>
+                                <i class="bi bi-geo-alt" style="color:#333"></i>
                             </div>
                             <h3 class="h4 fw-bold mb-0">Evaluación por Entidad</h3>
                         </div>
                         <div class="card-body p-4">
                             <p class="card-text mb-4">
-                                Análisis focalizado en una entidad federativa específica. Permite comparaciones 
+                                Análisis focalizado en una entidad federativa específica. Permite comparaciones
                                 regionales más precisas entre municipios de la misma entidad.
                             </p>
-                            
+
                             <div class="mb-4">
-                                <h6 class="fw-bold mb-3">
+                                <h6 class="fw-bold mb-3" style="color: #333 !important;">
                                     <i class="bi bi-check-circle-fill text-success me-2"></i>Características:
                                 </h6>
                                 <ul class="list-unstyled">
-                                    <li class="mb-2">
+                                    <li class="mb-2" style="color: #333 !important;">
                                         <i class="bi bi-arrow-right text-primary me-2"></i>
                                         Análisis específico por entidad federativa
                                     </li>
-                                    <li class="mb-2">
+                                    <li class="mb-2" style="color: #333 !important;">
                                         <i class="bi bi-arrow-right text-primary me-2"></i>
                                         Cuartiles calculados solo para la entidad
                                     </li>
-                                    <li class="mb-2">
+                                    <li class="mb-2" style="color: #333 !important;">
                                         <i class="bi bi-arrow-right text-primary me-2"></i>
                                         Comparaciones regionales más precisas
                                     </li>
-                                    <li class="mb-2">
-                                        <i class="bi bi-arrow-right text-primary me-2"></i>
-                                        Zoom automático a la región seleccionada
+                                    <li class="mb-2" style="color: #333 !important;"></li>
+                                    <i class="bi bi-arrow-right text-primary me-2"></i>
+                                    Zoom automático a la región seleccionada
                                     </li>
                                 </ul>
                             </div>
@@ -345,9 +425,9 @@
                             <div class="feature-icon bg-primary">
                                 <i class="bi bi-currency-dollar"></i>
                             </div>
-                            <h5 class="fw-bold">Índice de Ingreso</h5>
-                            <p class="text-muted">
-                                Evaluación de los niveles de ingreso y capacidad económica de la población.
+                            <h5 class="fw-bold" style="color: #333 !important;">Índice de Ingreso</h5>
+                            <p style="color: #666 !important;"></p>
+                            Evaluación de los niveles de ingreso y capacidad económica de la población.
                             </p>
                         </div>
                     </div>
@@ -356,9 +436,9 @@
                             <div class="feature-icon bg-warning">
                                 <i class="bi bi-lightning"></i>
                             </div>
-                            <h5 class="fw-bold">Índice Eléctrico</h5>
-                            <p class="text-muted">
-                                Análisis del acceso y calidad del servicio eléctrico en las comunidades.
+                            <h5 class="fw-bold" style="color: #333 !important;">Índice Eléctrico</h5>
+                            <p style="color: #666 !important;"></p>
+                            Análisis del acceso y calidad del servicio eléctrico en las comunidades.
                             </p>
                         </div>
                     </div>
@@ -367,9 +447,9 @@
                             <div class="feature-icon bg-danger">
                                 <i class="bi bi-house"></i>
                             </div>
-                            <h5 class="fw-bold">Pobreza Energética</h5>
-                            <p class="text-muted">
-                                Medición de la pobreza energética y acceso a servicios básicos.
+                            <h5 class="fw-bold" style="color: #333 !important;">Pobreza Energética</h5>
+                            <p style="color: #666 !important;"></p>
+                            Medición de la pobreza energética y acceso a servicios básicos.
                             </p>
                         </div>
                     </div>
@@ -381,9 +461,9 @@
                             <div class="feature-icon bg-info">
                                 <i class="bi bi-people"></i>
                             </div>
-                            <h5 class="fw-bold">Índice Sociodemográfico</h5>
-                            <p class="text-muted">
-                                Características demográficas y sociales de la población.
+                            <h5 class="fw-bold" style="color: #333 !important;">Índice Sociodemográfico</h5>
+                            <p style="color: #666 !important;"></p>
+                            Características demográficas y sociales de la población.
                             </p>
                         </div>
                     </div>
@@ -392,9 +472,9 @@
                             <div class="feature-icon bg-secondary">
                                 <i class="bi bi-exclamation-triangle"></i>
                             </div>
-                            <h5 class="fw-bold">Problemas Eléctricos</h5>
-                            <p class="text-muted">
-                                Identificación de problemas y deficiencias en el servicio eléctrico.
+                            <h5 class="fw-bold" style="color: #333 !important;">Problemas Eléctricos</h5>
+                            <p style="color: #666 !important;"></p>
+                            Identificación de problemas y deficiencias en el servicio eléctrico.
                             </p>
                         </div>
                     </div>
@@ -403,9 +483,9 @@
                             <div class="feature-icon bg-success">
                                 <i class="bi bi-briefcase"></i>
                             </div>
-                            <h5 class="fw-bold">Actividades Productivas</h5>
-                            <p class="text-muted">
-                                Evaluación de las actividades económicas y productivas locales.
+                            <h5 class="fw-bold" style="color: #333 !important;">Actividades Productivas</h5>
+                            <p style="color: #666 !important;"></p>
+                            Evaluación de las actividades económicas y productivas locales.
                             </p>
                         </div>
                     </div>
@@ -418,8 +498,8 @@
                                 <i class="bi bi-info-circle me-2"></i>Cálculo de Cuartiles
                             </h6>
                             <p class="mb-0">
-                                Los municipios se clasifican en cuartiles (Q1-Q4) donde <strong>Q1</strong> representa 
-                                el 25% con mejor puntaje (menor impacto social) y <strong>Q4</strong> el 25% con 
+                                Los municipios se clasifican en cuartiles (Q1-Q4) donde <strong>Q1</strong> representa
+                                el 25% con mejor puntaje (menor impacto social) y <strong>Q4</strong> el 25% con
                                 mayor necesidad de atención (mayor impacto social).
                             </p>
                         </div>
@@ -478,7 +558,7 @@
 
     <!-- Smooth scrolling for anchor links -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Smooth scrolling for anchor links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
