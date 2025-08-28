@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación por Entidad - Geovisor SENER</title>
+
+    <!-- Google Fonts: Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+
+    <!-- MapTiler SDK CSS -->
+    <link href="https://cdn.maptiler.com/maptiler-sdk-js/v3.6.1/maptiler-sdk.css" rel="stylesheet" />
+
+    <!-- Leaflet Locate Control CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
+
+    <!-- noUiSlider CSS -->
+    <link rel="stylesheet" href="vendor/nouislider/nouislider.min.css" />
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Estilos para las nuevas funcionalidades */
+        .indicator-info-btn {
+            border: none !important;
+            background: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .indicator-info-btn:hover i {
+            color: #0d6efd !important;
+        }
+
+        #quick-stats .card-body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 0.375rem;
+        }
+
+        #quick-stats strong {
+            font-size: 1.1rem;
+            display: block;
+        }
+
+        .cluster-active {
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .cluster-tooltip {
+            background-color: rgba(0, 0, 0, 0.8) !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 4px !important;
+            padding: 4px 8px !important;
+            font-size: 0.8rem !important;
+        }
+
+        /* Mejorar la apariencia de los controles de configuración */
+        #saved-configs {
+            min-width: 120px;
+        }
+
+        /* Animación suave para mostrar/ocultar paneles */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Estilos para popups mejorados del mapa */
+        .custom-municipality-popup .leaflet-popup-content {
+            margin: 8px 12px;
+            line-height: 1.4;
+        }
+
+        .municipality-popup h6 {
+            margin-bottom: 8px;
+            font-size: 1rem;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 4px;
+        }
+
+        .municipality-popup .small {
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+
+        .impact-results {
+            background-color: #f8f9fa;
+            padding: 8px;
+            border-radius: 4px;
+            border-left: 3px solid #28a745;
+        }
+
+        .impact-results h6 {
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            border: none;
+            padding: 0;
+        }
+
+        .impact-results .badge {
+            font-size: 0.75rem;
+        }
+
+        /* Estilos para el gráfico interactivo */
+        #quartile-chart {
+            cursor: pointer;
+        }
+
+        .oculto {
+            display: none !important;
+        }
+
+        /* Animación para mostrar el gráfico */
+        #resultados-chart-container {
+            animation: slideInUp 0.5s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Estilos específicos para selector de entidad */
+        .entity-selector {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 2px solid var(--color-verde-profundo);
+        }
+
+        .entity-selector h5 {
+            color: var(--color-verde-profundo);
+            font-weight: 700;
+        }
+
+        .entity-info {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Mejorar responsive design para mobile */
+        @media (max-width: 768px) {
+            #map {
+                height: 60vh !important;
+                min-height: 400px !important;
+            }
+
+            .col-lg-5 {
+                margin-bottom: 1rem;
+            }
+
+            .municipality-popup {
+                font-size: 0.9rem;
+            }
+
+            .custom-municipality-popup .leaflet-popup-content {
+                margin: 6px 8px;
+            }
+
+            /* Gráfico más compacto en móviles */
+            #quartile-chart {
+                height: 250px !important;
+            }
+
+            #resultados-chart-container {
+                margin-top: 1rem !important;
+            }
+        }
+
+        /* Estilos para mapa de pantalla completa inicialmente */
+        #map-column {
+            transition: all 0.3s ease;
+        }
+
+        #calculator-panel {
+            transition: all 0.3s ease;
+        }
+
+        /* Cuando no hay calculadora visible, el mapa ocupa toda la pantalla */
+        .full-width-map #map-column {
+            width: 100% !important;
+            flex: 0 0 100% !important;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Preloader -->
+    <div id="preloader"
+        class="d-flex flex-column align-items-center justify-content-center position-fixed top-0 start-0 w-100 h-100">
+        <div class="text-center">
+            <img src="img/mujer.png" alt="logo gobierno de méxico" style="max-width: 10rem; margin-bottom: 1rem;">
+            <h3 class="fw-bold">Subsecretaría de Planeación y Transición Energética</h3>
+            <p class="text-muted fs-5">Cargando datos y capas...</p>
+            <div class="spinner-border text-main-color" role="status"
+                style="width:2.5rem; height:2.5rem; margin:1.5rem 0;">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <div class="progress" style="height: 8px; width: 80%; margin: 0 auto; background-color: #e9ecef;">
+                <div id="preProgressBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+                    aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar Institucional -->
+    <nav class="institutional-navbar">
+        <div class="container-fluid">
+            <div class="row align-items-center w-100">
+                <div class="col-md-3 d-flex justify-content-start">
+                    <div class="navbar-brand-left">
+                        <img src="img/logo_sener.png" alt="SENER - Secretaría de Energía" class="sener-logo">
+                    </div>
+                </div>
+                <div class="col-md-6 text-center">
+                    <h1 class="navbar-title">Evaluación por Entidad Federativa</h1>
+                    <p class="navbar-subtitle">Subsecretaría de Planeación y Transición Energética</p>
+                </div>
+                <div class="col-md-3 d-flex justify-content-end">
+                    <div class="navbar-brand-right">
+                        <img src="img/logo_gob.png" alt="Gobierno de México" class="gob-logo">
+                        <a href="index.html" class="btn btn-outline-light btn-sm ms-2">
+                            <i class="bi bi-house-door me-1"></i>Inicio
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container py-4">
+
+            <!-- Selector de Entidad Federativa -->
+            <div class="entity-selector">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h5 class="mb-3">
+                            <i class="bi bi-geo-alt-fill me-2"></i>Seleccione la Entidad Federativa
+                        </h5>
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <select id="entity-selector" class="form-select form-select-lg">
+                                    <option value="">-- Seleccione una entidad federativa --</option>
+                                    <option value="01">Aguascalientes</option>
+                                    <option value="02">Baja California</option>
+                                    <option value="03">Baja California Sur</option>
+                                    <option value="04">Campeche</option>
+                                    <option value="05">Coahuila de Zaragoza</option>
+                                    <option value="06">Colima</option>
+                                    <option value="07">Chiapas</option>
+                                    <option value="08">Chihuahua</option>
+                                    <option value="09">Ciudad de México</option>
+                                    <option value="10">Durango</option>
+                                    <option value="11">Guanajuato</option>
+                                    <option value="12">Guerrero</option>
+                                    <option value="13">Hidalgo</option>
+                                    <option value="14">Jalisco</option>
+                                    <option value="15">México</option>
+                                    <option value="16">Michoacán de Ocampo</option>
+                                    <option value="17">Morelos</option>
+                                    <option value="18">Nayarit</option>
+                                    <option value="19">Nuevo León</option>
+                                    <option value="20">Oaxaca</option>
+                                    <option value="21">Puebla</option>
+                                    <option value="22">Querétaro</option>
+                                    <option value="23">Quintana Roo</option>
+                                    <option value="24">San Luis Potosí</option>
+                                    <option value="25">Sinaloa</option>
+                                    <option value="26">Sonora</option>
+                                    <option value="27">Tabasco</option>
+                                    <option value="28">Tamaulipas</option>
+                                    <option value="29">Tlaxcala</option>
+                                    <option value="30">Veracruz de Ignacio de la Llave</option>
+                                    <option value="31">Yucatán</option>
+                                    <option value="32">Zacatecas</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <button id="load-entity" class="btn btn-primary btn-lg w-100" disabled>
+                                    <i class="bi bi-download me-2"></i>Cargar Entidad
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <i class="bi bi-map" style="font-size: 3rem; color: var(--color-verde-profundo);"></i>
+                    </div>
+                </div>
+
+                <!-- Información de la entidad seleccionada -->
+                <div id="entity-info" class="entity-info" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h6 class="mb-2">
+                                <i class="bi bi-info-circle-fill me-2"></i>Información de la Entidad
+                            </h6>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <small class="text-muted d-block">Entidad:</small>
+                                    <strong id="entity-name">-</strong>
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="text-muted d-block">Municipios:</small>
+                                    <strong id="entity-municipalities">-</strong>
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="text-muted d-block">Clave:</small>
+                                    <strong id="entity-code">-</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <small class="text-success">✓ Entidad cargada correctamente</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alertas de Guía para el Usuario -->
+            <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                <h5 class="alert-heading"><i class="bi bi-info-circle-fill me-2"></i>Evaluación por Entidad Federativa
+                </h5>
+                <p class="mb-1">
+                    Esta herramienta te permite calcular un <strong>índice de impacto social</strong> para los
+                    municipios de una entidad federativa específica.
+                </p>
+                <ol class="small mb-0">
+                    <li><strong>Selecciona</strong> una entidad federativa del menú desplegable arriba.</li>
+                    <li><strong>Escoge</strong> uno o más indicadores de la lista.</li>
+                    <li><strong>Asigna un peso</strong> a cada indicador. La suma total debe ser 1.0.</li>
+                    <li>Haz clic en <strong>Aplicar</strong> para ver los resultados de la entidad.</li>
+                </ol>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <div class="alert alert-light border-secondary alert-dismissible fade show" role="alert">
+                <h6 class="alert-heading"><i class="bi bi-bar-chart-line-fill me-2"></i>Metodología</h6>
+                <p class="small mb-0">
+                    El análisis se enfoca únicamente en los municipios de la entidad seleccionada. Los cuartiles
+                    se calculan solo con los municipios de esa entidad, permitiendo comparaciones regionales más
+                    precisas.
+                </p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <!-- Contenedor Principal (Calculadora y Mapa) -->
+            <div id="main-content" class="full-width-map">
+                <div class="row">
+                    <!-- Columna de la Calculadora (Visible en Escritorio, Colapsable en Móvil) -->
+                    <div id="calculator-panel" class="col-lg-5 col-xl-4 d-none">
+                        <div class="d-lg-none mb-3">
+                            <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#impact-panel-collapse" aria-expanded="false"
+                                aria-controls="impact-panel-collapse">
+                                <i class="bi bi-calculator me-2"></i> Mostrar/Ocultar Calculadora
+                            </button>
+                        </div>
+
+                        <div class="collapse d-lg-block" id="impact-panel-collapse">
+                            <div id="impact-panel">
+                                <div class="card shadow-sm">
+                                    <div class="card-header">
+                                        <strong><i class="bi bi-calculator me-2"></i>Calculadora de Impacto</strong>
+                                    </div>
+                                    <div class="card-body">
+                                        <form id="impact-form">
+                                            <div id="indicators-list" class="mb-2">
+                                                <!-- Se llena dinámicamente con una cuadrícula responsiva -->
+                                            </div>
+
+                                            <div class="form-check form-switch mb-2">
+                                                <input class="form-check-input" type="checkbox"
+                                                    id="single-indicator-mode">
+                                                <label class="form-check-label" for="single-indicator-mode">Seleccionar
+                                                    solo
+                                                    1 indicador</label>
+                                            </div>
+
+                                            <div id="impact-validation" class="text-danger small mb-2"
+                                                style="display:none;"></div>
+
+                                            <div class="mb-3">
+                                                <small class="text-muted">
+                                                    <strong>Índices activos:</strong> <span
+                                                        id="active-indices">-</span><br>
+                                                    <strong>Suma de pesos:</strong> <span id="weight-sum"
+                                                        class="fw-bold">0.00</span><br>
+                                                    <strong>Ámbito de cálculo:</strong> <span id="calculation-scope"
+                                                        class="fw-bold text-primary">Nacional (2,469 municipios)</span>
+                                                </small>
+                                            </div>
+
+                                            <!-- Panel de estadísticas rápidas (oculto inicialmente) -->
+                                            <div id="quick-stats" class="card bg-light mb-3" style="display: none;">
+                                                <div class="card-body p-2">
+                                                    <h6 class="card-title mb-2"><i
+                                                            class="bi bi-speedometer2 me-1"></i>Estadísticas Rápidas
+                                                    </h6>
+                                                    <div class="row g-2 text-center">
+                                                        <div class="col-6">
+                                                            <small class="text-muted d-block">Municipios</small>
+                                                            <strong id="total-municipalities">-</strong>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <small class="text-muted d-block">Promedio</small>
+                                                            <strong id="average-score">-</strong>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <small class="text-muted d-block">Mejor</small>
+                                                            <strong id="best-score" class="text-success">-</strong>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <small class="text-muted d-block">Peor</small>
+                                                            <strong id="worst-score" class="text-danger">-</strong>
+                                                        </div>
+                                                    </div>
+                                                    <hr class="my-2">
+                                                    <div class="row g-2">
+                                                        <div class="col-12 col-md-6">
+                                                            <small class="text-success fw-bold d-block mb-1">Top 5
+                                                                Mejores</small>
+                                                            <div id="top5-best" class="small"></div>
+                                                        </div>
+                                                        <div class="col-12 col-md-6">
+                                                            <small class="text-danger fw-bold d-block mb-1">Top 5
+                                                                Peores</small>
+                                                            <div id="top5-worst" class="small"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="d-flex gap-2 mb-3 flex-wrap">
+                                                <button type="button" id="normalize-weights"
+                                                    class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip"
+                                                    title="Ajusta los pesos para que sumen 1.0">
+                                                    <i class="bi bi-distribute-vertical me-1"></i>Normalizar
+                                                </button>
+                                                <button type="button" id="apply-impact" class="btn btn-sm btn-primary"
+                                                    disabled>
+                                                    <i class="bi bi-check-circle-fill me-1"></i>Aplicar
+                                                </button>
+                                                <button type="button" id="clear-all"
+                                                    class="btn btn-sm btn-outline-secondary" data-bs-toggle="tooltip"
+                                                    title="Limpiar mapa y cerrar todas las secciones">
+                                                    <i class="bi bi-x-circle me-1"></i>Limpiar
+                                                </button>
+                                            </div>
+
+                                            <div class="d-flex gap-2 mb-3 flex-wrap">
+                                                <button type="button" id="save-config"
+                                                    class="btn btn-sm btn-outline-success" data-bs-toggle="tooltip"
+                                                    title="Guardar configuración actual">
+                                                    <i class="bi bi-save me-1"></i>Guardar
+                                                </button>
+                                                <button type="button" id="load-config"
+                                                    class="btn btn-sm btn-outline-info" data-bs-toggle="tooltip"
+                                                    title="Cargar configuración guardada">
+                                                    <i class="bi bi-folder-open me-1"></i>Cargar
+                                                </button>
+                                                <select id="saved-configs" class="form-select form-select-sm"
+                                                    style="max-width: 150px;">
+                                                    <option value="">Configuraciones...</option>
+                                                </select>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Columna del Mapa -->
+                    <div class="col-12" id="map-column">
+                        <div id="map-container" style="position: relative;">
+                            <div id="map" style="width:100%; height:80vh; min-height:500px; border-radius: 0.375rem;">
+                            </div>
+                            <div id="map-legend" class="map-legend-container oculto">
+                                <div class="legend-item"><span class="legend-color-box"
+                                        style="background-color: #2ECC71;"></span> Q1 (Mejor)</div>
+                                <div class="legend-item"><span class="legend-color-box"
+                                        style="background-color: #F1C40F;"></span> Q2</div>
+                                <div class="legend-item"><span class="legend-color-box"
+                                        style="background-color: #E67E22;"></span> Q3</div>
+                                <div class="legend-item"><span class="legend-color-box"
+                                        style="background-color: #C0392B;"></span> Q4 (Peor)</div>
+                                <div class="legend-item"><span class="legend-color-box"
+                                        style="background-color: #6c757d;"></span> Sin Datos</div>
+                            </div>
+                        </div>
+
+                        <!-- Leyendas de Rasters debajo del mapa -->
+                        <div class="row mt-3">
+                            <div class="col-12 d-flex flex-wrap align-items-start gap-3">
+                                <div>
+                                    <div id="simbol-fotovoltaico" class="color-ramp-container" style="display:none;">
+                                        <div class="color-ramp-title">Potencial fotovoltaico [kWh/kWp] Fuente: <a
+                                                href='https://globalsolaratlas.info/download/world'
+                                                target='_blank'>globalsolaratlas.info</a></div>
+                                        <div class="color-gradient-bar fotovoltaico-gradient"></div>
+                                        <div class="color-labels values">
+                                            <span>3.22</span><span>3.63</span><span>4.04</span><span>4.44</span><span>4.85</span><span>5.26</span><span>5.67</span>
+                                        </div>
+                                        <div class="color-labels categories">
+                                            <span>Bajo</span><span></span><span>Moderado</span><span></span><span>Bueno</span><span>Alto</span><span>Muy
+                                                alto</span>
+                                        </div>
+                                    </div>
+
+                                    <div id="simbol-radiacion" class="color-ramp-container" style="display:none;">
+                                        <div class="color-ramp-title">Radiación horizontal [kWh/m²] Fuente: <a
+                                                href='https://globalsolaratlas.info/download/world'
+                                                target='_blank'>globalsolaratlas.info</a></div>
+                                        <div class="color-gradient-bar radiacion-gradient"></div>
+                                        <div class="color-labels values">
+                                            <span>3.58</span><span>3.99</span><span>4.39</span><span>4.8</span><span>5.2</span><span>5.61</span><span>6.01</span><span>6.42</span>
+                                        </div>
+                                        <div class="color-labels categories">
+                                            <span>Bajo</span><span></span><span>Moderado</span><span></span><span>Bueno</span><span></span><span>Alto</span><span>Muy
+                                                alto</span>
+                                        </div>
+                                    </div>
+
+                                    <div id="simbol-viento-50m" class="color-ramp-container" style="display:none;">
+                                        <div class="color-ramp-title">Velocidad de viento a 50m [m/s] Fuente: <a
+                                                href='https://globalwindatlas.info/es/download/gis-files'
+                                                target='_blank'>globalwindatlas.info</a></div>
+                                        <div class="color-gradient-bar viento-gradient"></div>
+                                        <div class="color-labels values">
+                                            <span>&lt;3</span><span>6</span><span>9</span><span>12</span><span>15&lt;</span>
+                                        </div>
+                                        <div class="color-ramp-description">La velocidad del viento se incrementa
+                                            conforme
+                                            aumenta la altura, hay más densidad y potencial aprovechable.</div>
+                                    </div>
+
+                                    <div id="simbol-viento-100m" class="color-ramp-container" style="display:none;">
+                                        <div class="color-ramp-title">Velocidad de viento a 100m [m/s] Fuente: <a
+                                                href='https://globalwindatlas.info/es/download/gis-files'
+                                                target='_blank'>globalwindatlas.info</a></div>
+                                        <div class="color-gradient-bar viento-gradient-100m"></div>
+                                        <div class="color-labels values">
+                                            <span>&lt;3</span><span>6</span><span>9</span><span>12</span><span>15&lt;</span>
+                                        </div>
+                                        <div class="color-ramp-description">A mayor altura, mayor velocidad del viento y
+                                            mejor potencial para generación eólica.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contenedor de todos los resultados -->
+                <div id="resultados-container" class="mt-4 oculto">
+
+                    <!-- Fila de Resultados y Gráfico en 2 Columnas -->
+                    <div class="row g-4">
+                        <!-- Columna 1: Resultados por Cuartil -->
+                        <div class="col-lg-6">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <strong><i class="bi bi-grid-fill me-2"></i>Resultados por Cuartil</strong>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <small class="text-muted">Top</small>
+                                        <select id="topN-select" class="form-select form-select-sm" style="width:72px">
+                                            <option value="5" selected>5</option>
+                                            <option value="10">10</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row g-3">
+                                        <div class="col-6 col-lg-6">
+                                            <div class="card text-center p-2 border-success bg-success-subtle h-100">
+                                                <small data-bs-toggle="tooltip"
+                                                    title="25% de municipios con mejor puntaje">Q1
+                                                    (Mejor)</small>
+                                                <div id="q1-count" class="fs-5 fw-bold text-success">-</div>
+                                                <div class="d-flex gap-1 justify-content-center mt-1">
+                                                    <button class="btn btn-sm btn-outline-success quartile-btn" disabled
+                                                        id="q1-toggle" data-bs-toggle="tooltip"
+                                                        title="Resaltar los municipios de este cuartil en el mapa principal"><i
+                                                            class="bi bi-pin-map"></i> Mapa</button>
+                                                    <button class="btn btn-sm btn-success quartile-view-btn" disabled
+                                                        id="q1-view" data-quartile="1" data-bs-toggle="tooltip"
+                                                        title="Ver Detalle de la Entidad"><i class="bi bi-search"></i>
+                                                        Detalle</button>
+                                                </div>
+                                                <div class="mt-2 small">
+                                                    <div class="row g-1 text-start">
+                                                        <div class="col-6">
+                                                            <span class="text-success fw-bold">Mejores</span>
+                                                            <ul id="q1-top-best" class="list-unstyled mb-0 top-list"></ul>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <span class="text-danger fw-bold">Peores</span>
+                                                            <ul id="q1-top-worst" class="list-unstyled mb-0 top-list"></ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-lg-6">
+                                            <div class="card text-center p-2 border-warning bg-warning-subtle h-100">
+                                                <small data-bs-toggle="tooltip"
+                                                    title="Municipios entre el 25% y 50% de puntaje">Q2</small>
+                                                <div id="q2-count" class="fs-5 fw-bold text-warning">-</div>
+                                                <div class="d-flex gap-1 justify-content-center mt-1">
+                                                    <button class="btn btn-sm btn-outline-warning quartile-btn" disabled
+                                                        id="q2-toggle" data-bs-toggle="tooltip"
+                                                        title="Resaltar los municipios de este cuartil en el mapa principal"><i
+                                                            class="bi bi-pin-map"></i> Mapa</button>
+                                                    <button class="btn btn-sm btn-warning quartile-view-btn" disabled
+                                                        id="q2-view" data-quartile="2" data-bs-toggle="tooltip"
+                                                        title="Ver Detalle de la Entidad"><i class="bi bi-search"></i>
+                                                        Detalle</button>
+                                                </div>
+                                                <div class="mt-2 small">
+                                                    <div class="row g-1 text-start">
+                                                        <div class="col-6">
+                                                            <span class="text-success fw-bold">Mejores</span>
+                                                            <ul id="q2-top-best" class="list-unstyled mb-0 top-list"></ul>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <span class="text-danger fw-bold">Peores</span>
+                                                            <ul id="q2-top-worst" class="list-unstyled mb-0 top-list"></ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-lg-6">
+                                            <div class="card text-center p-2 h-100"
+                                                style="border-color: #E67E22; background-color: #fcebd8;">
+                                                <small data-bs-toggle="tooltip"
+                                                    title="Municipios entre el 50% y 75% de puntaje">Q3</small>
+                                                <div id="q3-count" class="fs-5 fw-bold" style="color: #E67E22;">-</div>
+                                                <div class="d-flex gap-1 justify-content-center mt-1">
+                                                    <button class="btn btn-sm quartile-btn" id="q3-toggle" disabled
+                                                        data-bs-toggle="tooltip"
+                                                        title="Resaltar los municipios de este cuartil en el mapa principal"
+                                                        style="border-color: #E67E22; color: #E67E22;"><i
+                                                            class="bi bi-pin-map"></i> Mapa</button>
+                                                    <button class="btn btn-sm quartile-view-btn" disabled id="q3-view"
+                                                        data-quartile="3" data-bs-toggle="tooltip"
+                                                        title="Ver Detalle de la Entidad"
+                                                        style="background-color: #E67E22; color: white; border-color: #E67E22;"><i
+                                                            class="bi bi-search"></i> Detalle</button>
+                                                </div>
+                                                <div class="mt-2 small">
+                                                    <div class="row g-1 text-start">
+                                                        <div class="col-6">
+                                                            <span class="text-success fw-bold">Mejores</span>
+                                                            <ul id="q3-top-best" class="list-unstyled mb-0 top-list"></ul>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <span class="text-danger fw-bold">Peores</span>
+                                                            <ul id="q3-top-worst" class="list-unstyled mb-0 top-list"></ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-lg-6">
+                                            <div class="card text-center p-2 border-danger bg-danger-subtle h-100">
+                                                <small data-bs-toggle="tooltip"
+                                                    title="25% de municipios con peor puntaje">Q4
+                                                    (Peor)</small>
+                                                <div id="q4-count" class="fs-5 fw-bold text-danger">-</div>
+                                                <div class="d-flex gap-1 justify-content-center mt-1">
+                                                    <button class="btn btn-sm btn-outline-danger quartile-btn" disabled
+                                                        id="q4-toggle" data-bs-toggle="tooltip"
+                                                        title="Resaltar los municipios de este cuartil en el mapa principal"><i
+                                                            class="bi bi-pin-map"></i> Mapa</button>
+                                                    <button class="btn btn-sm btn-danger quartile-view-btn" disabled
+                                                        id="q4-view" data-quartile="4" data-bs-toggle="tooltip"
+                                                        title="Ver Detalle de la Entidad"><i class="bi bi-search"></i>
+                                                        Detalle</button>
+                                                </div>
+                                                <div class="mt-2 small">
+                                                    <div class="row g-1 text-start">
+                                                        <div class="col-6">
+                                                            <span class="text-success fw-bold">Mejores</span>
+                                                            <ul id="q4-top-best" class="list-unstyled mb-0 top-list"></ul>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <span class="text-danger fw-bold">Peores</span>
+                                                            <ul id="q4-top-worst" class="list-unstyled mb-0 top-list"></ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Columna 2: Gráfico de Distribución -->
+                        <div class="col-lg-6">
+                            <div id="resultados-chart-container" class="h-100">
+                                <div class="card h-100">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h6 class="mb-0"><i class="bi bi-bar-chart-fill me-2"></i>Distribución por Municipio
+                                        </h6>
+                                        <button id="chart-toggle" class="btn btn-sm btn-outline-secondary">
+                                            <i class="bi bi-chevron-up me-1"></i>Ocultar
+                                        </button>
+                                    </div>
+                                    <div class="card-body p-2" id="chart-container">
+                                        <div id="quartile-chart" style="width: 100%; height: 300px;"></div>
+                                        <small class="text-muted d-block mt-2 text-center">
+                                            <i class="bi bi-info-circle me-1"></i>Haz clic en una barra para ver el detalle
+                                            del municipio
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fila de Reportes (debajo) -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <!-- Reporte Descargable -->
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0"><i class="bi bi-table me-2"></i>Reporte de Municipios por Cuartil</h6>
+                                    <button id="report-toggle" class="btn btn-sm btn-outline-secondary">
+                                        <i class="bi bi-chevron-down me-1"></i>Mostrar
+                                    </button>
+                                </div>
+                                <div class="card-body p-2" id="report-container" style="display: none;">
+                                    <div class="table-responsive">
+                                        <table id="municipalities-table" class="table table-sm table-striped table-hover"
+                                            style="width:100%">
+                                            <thead class="table-dark">
+                                                <tr>
+                                                    <th>Estado</th>
+                                                    <th>Municipio</th>
+                                                    <th>CVE</th>
+                                                    <th>Viviendas</th>
+                                                    <th>Puntaje</th>
+                                                    <th>Cuartil</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- Se llena dinámicamente -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modals would be similar to evaluacion_nacional.html -->
+
+    <!-- Footer gob.mx -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h5>Enlaces</h5>
+                            <ul>
+                                <li><a href="#">Participa</a></li>
+                                <li><a href="#">Publicaciones Oficiales</a></li>
+                                <li><a href="#">Marco Jurídico</a></li>
+                                <li><a href="#">Plataforma Nacional de Transparencia</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <h5>¿Qué es gob.mx?</h5>
+                            <p>Es el portal único de trámites, información y participación ciudadana. <a href="#">Leer
+                                    más</a></p>
+                        </div>
+                        <div class="col-md-4">
+                            <h5>Síguenos en</h5>
+                            <ul class="social-icons">
+                                <li><a href="#"><i class="bi bi-facebook"></i></a></li>
+                                <li><a href="#"><i class="bi bi-twitter"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <img src="img/logo_gob.png" alt="logo gobierno de méxico" class="w-100" style="max-width: 200px;">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <hr class="my-4">
+                    <p class="text-center">Denuncia contra servidores públicos</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+
+    <!-- MapTiler SDK -->
+    <script src="https://cdn.maptiler.com/maptiler-sdk-js/v3.6.1/maptiler-sdk.umd.min.js"></script>
+    <script src="https://cdn.maptiler.com/leaflet-maptilersdk/v4.1.0/leaflet-maptilersdk.umd.min.js"></script>
+
+    <!-- Leaflet Locate Control -->
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
+
+    <!-- Leaflet.EasyPrint JS -->
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-easyprint@2.1.9/dist/bundle.min.js"></script>
+
+    <!-- Turf.js for geospatial analysis -->
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js"></script>
+
+    <!-- ECharts for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+
+    <!-- DataTables JS (con jQuery) -->
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+
+    <!-- DataTables Export Buttons -->
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+
+    <!-- noUiSlider JS (UMD) -->
+    <script src="https://cdn.jsdelivr.net/npm/nouislider@15.7.1/dist/nouislider.min.js"></script>
+
+    <!-- Scripts de la aplicación -->
+    <script src="mapa.js"></script>
+    <script src="indicadores/brillantes.js"></script>
+    <script src="impacto.js"></script>
+
+    <!-- Script específico para evaluación por entidad -->
+    <script>
+        // Variable global para almacenar la entidad seleccionada
+        window.selectedEntity = null;
+
+        // Inicializar el mapa cuando esté listo
+        function initializeMapForEntity() {
+            if (window.initializeEntityEvaluationMap) {
+                window.initializeEntityEvaluationMap();
+            } else {
+                // Si la función no está disponible, reintentar en un momento
+                setTimeout(initializeMapForEntity, 500);
+            }
+        }
+
+        // Escuchar el evento de capas listas del mapa
+        window.addEventListener('mapLayersReady', function (event) {
+            console.log('Evento mapLayersReady recibido - inicializando evaluación por entidad');
+            initializeMapForEntity();
+        });
+
+        // Escuchar el evento de entidad filtrada para actualizar el ámbito de cálculo
+        window.addEventListener('entityFiltered', function (event) {
+            const calculationScopeEl = document.getElementById('calculation-scope');
+            if (calculationScopeEl && window.selectedEntity && window.selectedEntity.name) {
+                calculationScopeEl.textContent = `${window.selectedEntity.name} (${event.detail.municipalitiesCount} municipios)`;
+                calculationScopeEl.className = 'fw-bold text-success';
+            }
+        });
+
+        // Inicializar la funcionalidad de selección de entidad
+        document.addEventListener('DOMContentLoaded', function () {
+            const entitySelector = document.getElementById('entity-selector');
+            const loadEntityBtn = document.getElementById('load-entity');
+            const entityInfo = document.getElementById('entity-info');
+            const mainContent = document.getElementById('main-content');
+
+            // Inicializar el mapa después de un breve delay como respaldo
+            setTimeout(initializeMapForEntity, 2000);
+
+            // Habilitar/deshabilitar botón de cargar según selección
+            entitySelector.addEventListener('change', function () {
+                const selected = this.value;
+                loadEntityBtn.disabled = !selected;
+
+                if (selected) {
+                    loadEntityBtn.innerHTML = '<i class="bi bi-download me-2"></i>Cargar ' + this.options[this.selectedIndex].text;
+                } else {
+                    loadEntityBtn.innerHTML = '<i class="bi bi-download me-2"></i>Cargar Entidad';
+                }
+            });
+
+            // Cargar entidad seleccionada
+            loadEntityBtn.addEventListener('click', function () {
+                const selectedValue = entitySelector.value;
+                const selectedText = entitySelector.options[entitySelector.selectedIndex].text;
+
+                if (selectedValue) {
+                    // Guardar entidad seleccionada
+                    window.selectedEntity = {
+                        code: selectedValue,
+                        name: selectedText
+                    };
+
+                    // Mostrar información de la entidad
+                    document.getElementById('entity-name').textContent = selectedText;
+                    document.getElementById('entity-code').textContent = selectedValue;
+                    document.getElementById('entity-municipalities').textContent = 'Cargando...';
+
+                    entityInfo.style.display = 'block';
+
+                    // Mostrar el panel de la calculadora
+                    const calculatorPanel = document.getElementById('calculator-panel');
+                    const mapColumn = document.getElementById('map-column');
+
+                    if (calculatorPanel && mapColumn) {
+                        calculatorPanel.classList.remove('d-none');
+                        calculatorPanel.style.display = 'block';
+                        mapColumn.className = 'col-lg-7 col-xl-8'; // Reducir tamaño del mapa
+
+                        // Remover la clase de mapa completo
+                        mainContent.classList.remove('full-width-map');
+                    }
+
+                    // Scroll suave hacia el contenido principal
+                    mainContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                    // Invalidar el tamaño del mapa después de mostrar la calculadora
+                    setTimeout(() => {
+                        if (window.map && window.map.invalidateSize) {
+                            window.map.invalidateSize();
+                        }
+                    }, 300);
+
+                    // Filtrar municipios por entidad
+                    if (window.filterMunicipalitiesByEntity) {
+                        window.filterMunicipalitiesByEntity(selectedValue);
+                    }
+
+                    console.log('Entidad cargada:', window.selectedEntity);
+                }
+            });
+        });
+
+        // Función para obtener la entidad seleccionada (para uso en otros scripts)
+        window.getSelectedEntity = function () {
+            return window.selectedEntity;
+        };
+    </script>
+
+    <!-- Inicializador de Tooltips de Bootstrap -->
+    <script>
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
+
+</body>
+
+</html>
