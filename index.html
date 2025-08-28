@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geovisor SENER - Evaluación de Impacto Social</title>
+
+    <!-- Google Fonts: Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Estilos específicos para la página principal */
+        .hero-section {
+            background: linear-gradient(135deg, var(--color-verde-profundo) 0%, var(--color-verde-claro) 100%);
+            color: white;
+            padding: 4rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .hero-section h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .evaluation-card {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            height: 100%;
+        }
+
+        .evaluation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border-color: var(--color-verde-profundo);
+        }
+
+        .evaluation-card .card-header {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-bottom: 2px solid var(--color-verde-profundo);
+        }
+
+        .evaluation-card .btn {
+            transition: all 0.3s ease;
+        }
+
+        .evaluation-card .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--color-verde-claro) 0%, var(--color-verde-profundo) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .methodology-section {
+            background-color: #f8f9fa;
+            padding: 3rem 0;
+            margin: 3rem 0;
+        }
+
+        .stats-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-verde-profundo);
+        }
+
+        /* Animaciones */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .fade-in-up-delay-1 {
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+        }
+
+        .fade-in-up-delay-2 {
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar Institucional -->
+    <nav class="institutional-navbar">
+        <div class="container-fluid">
+            <div class="row align-items-center w-100">
+                <div class="col-md-3 d-flex justify-content-start">
+                    <div class="navbar-brand-left">
+                        <img src="img/logo_sener.png" alt="SENER - Secretaría de Energía" class="sener-logo">
+                    </div>
+                </div>
+                <div class="col-md-6 text-center">
+                    <h1 class="navbar-title">Geovisor SENER</h1>
+                    <p class="navbar-subtitle">Subsecretaría de Planeación y Transición Energética</p>
+                </div>
+                <div class="col-md-3 d-flex justify-content-end">
+                    <div class="navbar-brand-right">
+                        <img src="img/logo_gob.png" alt="Gobierno de México" class="gob-logo">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-8 fade-in-up">
+                        <h1>Evaluación de Impacto Social</h1>
+                        <p class="lead">
+                            Herramienta integral para el análisis y evaluación del impacto social en el desarrollo 
+                            de proyectos energéticos a nivel nacional y por entidad federativa.
+                        </p>
+                        <div class="d-flex gap-3 flex-wrap">
+                            <a href="#evaluaciones" class="btn btn-light btn-lg">
+                                <i class="bi bi-arrow-down me-2"></i>Comenzar Evaluación
+                            </a>
+                            <a href="#metodologia" class="btn btn-outline-light btn-lg">
+                                <i class="bi bi-info-circle me-2"></i>Conocer Metodología
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 text-center fade-in-up-delay-1">
+                        <i class="bi bi-geo-alt-fill" style="font-size: 8rem; opacity: 0.3;"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Estadísticas Rápidas -->
+        <section class="container mb-5">
+            <div class="row g-4 fade-in-up">
+                <div class="col-md-3">
+                    <div class="card stats-card text-center p-3">
+                        <div class="stats-number">32</div>
+                        <small class="text-muted">Entidades Federativas</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stats-card text-center p-3">
+                        <div class="stats-number">2,469</div>
+                        <small class="text-muted">Municipios</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stats-card text-center p-3">
+                        <div class="stats-number">6</div>
+                        <small class="text-muted">Indicadores Sociales</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stats-card text-center p-3">
+                        <div class="stats-number">100%</div>
+                        <small class="text-muted">Cobertura Nacional</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Evaluaciones -->
+        <section id="evaluaciones" class="container mb-5">
+            <div class="row">
+                <div class="col-12 text-center mb-5 fade-in-up">
+                    <h2 class="display-5 fw-bold mb-3">Selecciona el Tipo de Evaluación</h2>
+                    <p class="lead text-muted">
+                        Elige entre evaluación nacional completa o análisis específico por entidad federativa
+                    </p>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <!-- Evaluación Nacional -->
+                <div class="col-lg-6 fade-in-up">
+                    <div class="card evaluation-card shadow-sm">
+                        <div class="card-header text-center py-4">
+                            <div class="feature-icon">
+                                <i class="bi bi-map"></i>
+                            </div>
+                            <h3 class="h4 fw-bold mb-0">Evaluación Nacional</h3>
+                        </div>
+                        <div class="card-body p-4">
+                            <p class="card-text mb-4">
+                                Análisis completo de impacto social a nivel nacional. Evalúa todos los municipios 
+                                de México utilizando indicadores socioeconómicos y demográficos.
+                            </p>
+                            
+                            <div class="mb-4">
+                                <h6 class="fw-bold mb-3">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>Características:
+                                </h6>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2">
+                                        <i class="bi bi-arrow-right text-primary me-2"></i>
+                                        Cobertura completa de 2,469 municipios
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="bi bi-arrow-right text-primary me-2"></i>
+                                        Comparación entre todas las entidades federativas
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="bi bi-arrow-right text-primary me-2"></i>
+                                        Cuartiles calculados a nivel nacional
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="bi bi-arrow-right text-primary me-2"></i>
+                                        Reportes y gráficos interactivos
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="text-center">
+                                <a href="evaluacion_nacional.html" class="btn btn-primary btn-lg w-100">
+                                    <i class="bi bi-globe-americas me-2"></i>
+                                    Iniciar Evaluación Nacional
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Evaluación por Entidad -->
+                <div class="col-lg-6 fade-in-up-delay-1">
+                    <div class="card evaluation-card shadow-sm">
+                        <div class="card-header text-center py-4">
+                            <div class="feature-icon">
+                                <i class="bi bi-geo-alt"></i>
+                            </div>
+                            <h3 class="h4 fw-bold mb-0">Evaluación por Entidad</h3>
+                        </div>
+                        <div class="card-body p-4">
+                            <p class="card-text mb-4">
+                                Análisis focalizado en una entidad federativa específica. Permite comparaciones 
+                                regionales más precisas entre municipios de la misma entidad.
+                            </p>
+                            
+                            <div class="mb-4">
+                                <h6 class="fw-bold mb-3">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>Características:
+                                </h6>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2">
+                                        <i class="bi bi-arrow-right text-primary me-2"></i>
+                                        Análisis específico por entidad federativa
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="bi bi-arrow-right text-primary me-2"></i>
+                                        Cuartiles calculados solo para la entidad
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="bi bi-arrow-right text-primary me-2"></i>
+                                        Comparaciones regionales más precisas
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="bi bi-arrow-right text-primary me-2"></i>
+                                        Zoom automático a la región seleccionada
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="text-center">
+                                <a href="evaluacion_entidad.html" class="btn btn-success btn-lg w-100">
+                                    <i class="bi bi-pin-map me-2"></i>
+                                    Iniciar Evaluación por Entidad
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Metodología -->
+        <section id="metodologia" class="methodology-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center mb-5 fade-in-up">
+                        <h2 class="display-6 fw-bold mb-3">Metodología de Evaluación</h2>
+                        <p class="lead text-muted">
+                            Conoce los indicadores y la metodología utilizada para la evaluación de impacto social
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-4 fade-in-up">
+                        <div class="text-center">
+                            <div class="feature-icon bg-primary">
+                                <i class="bi bi-currency-dollar"></i>
+                            </div>
+                            <h5 class="fw-bold">Índice de Ingreso</h5>
+                            <p class="text-muted">
+                                Evaluación de los niveles de ingreso y capacidad económica de la población.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 fade-in-up-delay-1">
+                        <div class="text-center">
+                            <div class="feature-icon bg-warning">
+                                <i class="bi bi-lightning"></i>
+                            </div>
+                            <h5 class="fw-bold">Índice Eléctrico</h5>
+                            <p class="text-muted">
+                                Análisis del acceso y calidad del servicio eléctrico en las comunidades.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 fade-in-up-delay-2">
+                        <div class="text-center">
+                            <div class="feature-icon bg-danger">
+                                <i class="bi bi-house"></i>
+                            </div>
+                            <h5 class="fw-bold">Pobreza Energética</h5>
+                            <p class="text-muted">
+                                Medición de la pobreza energética y acceso a servicios básicos.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-4">
+                    <div class="col-md-4 fade-in-up">
+                        <div class="text-center">
+                            <div class="feature-icon bg-info">
+                                <i class="bi bi-people"></i>
+                            </div>
+                            <h5 class="fw-bold">Índice Sociodemográfico</h5>
+                            <p class="text-muted">
+                                Características demográficas y sociales de la población.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 fade-in-up-delay-1">
+                        <div class="text-center">
+                            <div class="feature-icon bg-secondary">
+                                <i class="bi bi-exclamation-triangle"></i>
+                            </div>
+                            <h5 class="fw-bold">Problemas Eléctricos</h5>
+                            <p class="text-muted">
+                                Identificación de problemas y deficiencias en el servicio eléctrico.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 fade-in-up-delay-2">
+                        <div class="text-center">
+                            <div class="feature-icon bg-success">
+                                <i class="bi bi-briefcase"></i>
+                            </div>
+                            <h5 class="fw-bold">Actividades Productivas</h5>
+                            <p class="text-muted">
+                                Evaluación de las actividades económicas y productivas locales.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col-12 text-center fade-in-up">
+                        <div class="alert alert-light border-primary">
+                            <h6 class="alert-heading">
+                                <i class="bi bi-info-circle me-2"></i>Cálculo de Cuartiles
+                            </h6>
+                            <p class="mb-0">
+                                Los municipios se clasifican en cuartiles (Q1-Q4) donde <strong>Q1</strong> representa 
+                                el 25% con mejor puntaje (menor impacto social) y <strong>Q4</strong> el 25% con 
+                                mayor necesidad de atención (mayor impacto social).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer gob.mx -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h5>Enlaces</h5>
+                            <ul>
+                                <li><a href="#">Participa</a></li>
+                                <li><a href="#">Publicaciones Oficiales</a></li>
+                                <li><a href="#">Marco Jurídico</a></li>
+                                <li><a href="#">Plataforma Nacional de Transparencia</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <h5>¿Qué es gob.mx?</h5>
+                            <p>Es el portal único de trámites, información y participación ciudadana. <a href="#">Leer
+                                    más</a></p>
+                        </div>
+                        <div class="col-md-4">
+                            <h5>Síguenos en</h5>
+                            <ul class="social-icons">
+                                <li><a href="#"><i class="bi bi-facebook"></i></a></li>
+                                <li><a href="#"><i class="bi bi-twitter"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <img src="img/logo_gob.png" alt="logo gobierno de méxico" class="w-100" style="max-width: 200px;">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <hr class="my-4">
+                    <p class="text-center">Denuncia contra servidores públicos</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+
+    <!-- Smooth scrolling for anchor links -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Add animation classes on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in-up');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe elements that should animate
+            document.querySelectorAll('.card, .feature-icon').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+
+</html>

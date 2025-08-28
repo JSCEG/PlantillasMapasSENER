@@ -1264,6 +1264,16 @@
                         window.filterMunicipalitiesByEntity(selectedValue);
                     }
 
+                    // Activar la capa de municipios automáticamente
+                    setTimeout(() => {
+                        if (window.overlayMaps && window.overlayMaps['Municipios'] && window.map) {
+                            if (!window.map.hasLayer(window.overlayMaps['Municipios'])) {
+                                window.map.addLayer(window.overlayMaps['Municipios']);
+                                console.log('Capa de municipios activada automáticamente');
+                            }
+                        }
+                    }, 500);
+
                     console.log('Entidad cargada:', window.selectedEntity);
                 }
             });
