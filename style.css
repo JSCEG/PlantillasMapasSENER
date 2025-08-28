@@ -824,48 +824,73 @@ body {
 }
 
 .fotovoltaico-gradient {
-    background: linear-gradient(to right, 
-        #8B4513 0%,     /* Marrón oscuro - Bajo */
-        #CD853F 16.67%, /* Marrón claro */
-        #DAA520 33.33%, /* Dorado oscuro */
-        #FFD700 50%,    /* Dorado */
-        #FFA500 66.67%, /* Naranja */
-        #FF8C00 83.33%, /* Naranja oscuro */
-        #FF4500 100%    /* Rojo naranja - Muy alto */
-    );
+    background: linear-gradient(to right,
+            #8B4513 0%,
+            /* Marrón oscuro - Bajo */
+            #CD853F 16.67%,
+            /* Marrón claro */
+            #DAA520 33.33%,
+            /* Dorado oscuro */
+            #FFD700 50%,
+            /* Dorado */
+            #FFA500 66.67%,
+            /* Naranja */
+            #FF8C00 83.33%,
+            /* Naranja oscuro */
+            #FF4500 100%
+            /* Rojo naranja - Muy alto */
+        );
 }
 
 .radiacion-gradient {
-    background: linear-gradient(to right, 
-        #4B0082 0%,     /* Índigo - Bajo */
-        #8A2BE2 14.29%, /* Violeta azul */
-        #9932CC 28.57%, /* Orquídea oscuro */
-        #BA55D3 42.86%, /* Orquídea medio */
-        #DA70D6 57.14%, /* Orquídea */
-        #FF69B4 71.43%, /* Rosa fuerte */
-        #FF1493 85.71%, /* Rosa profundo */
-        #DC143C 100%    /* Carmesí - Muy alto */
-    );
+    background: linear-gradient(to right,
+            #4B0082 0%,
+            /* Índigo - Bajo */
+            #8A2BE2 14.29%,
+            /* Violeta azul */
+            #9932CC 28.57%,
+            /* Orquídea oscuro */
+            #BA55D3 42.86%,
+            /* Orquídea medio */
+            #DA70D6 57.14%,
+            /* Orquídea */
+            #FF69B4 71.43%,
+            /* Rosa fuerte */
+            #FF1493 85.71%,
+            /* Rosa profundo */
+            #DC143C 100%
+            /* Carmesí - Muy alto */
+        );
 }
 
 .viento-gradient {
-    background: linear-gradient(to right, 
-        #E0F6FF 0%,     /* Azul muy claro - <3 m/s */
-        #87CEEB 25%,    /* Azul cielo - 6 m/s */
-        #4682B4 50%,    /* Azul acero - 9 m/s */
-        #191970 75%,    /* Azul medianoche - 12 m/s */
-        #000080 100%    /* Azul marino - 15+ m/s */
-    );
+    background: linear-gradient(to right,
+            #E0F6FF 0%,
+            /* Azul muy claro - <3 m/s */
+            #87CEEB 25%,
+            /* Azul cielo - 6 m/s */
+            #4682B4 50%,
+            /* Azul acero - 9 m/s */
+            #191970 75%,
+            /* Azul medianoche - 12 m/s */
+            #000080 100%
+            /* Azul marino - 15+ m/s */
+        );
 }
 
 .viento-gradient-100m {
-    background: linear-gradient(to right, 
-        #E8F5E8 0%,     /* Verde muy claro - <3 m/s */
-        #90EE90 25%,    /* Verde claro - 6 m/s */
-        #32CD32 50%,    /* Verde lima - 9 m/s */
-        #228B22 75%,    /* Verde bosque - 12 m/s */
-        #006400 100%    /* Verde oscuro - 15+ m/s */
-    );
+    background: linear-gradient(to right,
+            #E8F5E8 0%,
+            /* Verde muy claro - <3 m/s */
+            #90EE90 25%,
+            /* Verde claro - 6 m/s */
+            #32CD32 50%,
+            /* Verde lima - 9 m/s */
+            #228B22 75%,
+            /* Verde bosque - 12 m/s */
+            #006400 100%
+            /* Verde oscuro - 15+ m/s */
+        );
 }
 
 .color-labels {
@@ -978,7 +1003,7 @@ body {
     background: var(--color-verde-profundo);
     border-radius: 50%;
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s ease;
 }
 
@@ -993,11 +1018,11 @@ body {
     border-radius: 50%;
     cursor: pointer;
     border: none;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .raster-control-item {
-    background: rgba(255,255,255,0.3);
+    background: rgba(255, 255, 255, 0.3);
     border-radius: 6px;
     padding: 12px;
     margin-bottom: 0;
@@ -1030,7 +1055,7 @@ body {
 }
 
 .raster-opacity-control::-webkit-scrollbar-track {
-    background: rgba(0,0,0,0.1);
+    background: rgba(0, 0, 0, 0.1);
     border-radius: 3px;
 }
 
@@ -1066,7 +1091,7 @@ body {
     background: var(--color-burdeos-medio);
     border-radius: 50%;
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s ease;
 }
 
@@ -1081,11 +1106,11 @@ body {
     border-radius: 50%;
     cursor: pointer;
     border: none;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .municipalities-control-item {
-    background: rgba(255,255,255,0.3);
+    background: rgba(255, 255, 255, 0.3);
     border-radius: 6px;
     padding: 12px;
     margin-bottom: 0;
@@ -1097,6 +1122,7 @@ body {
     background: rgba(96, 22, 35, 0.05);
     border-color: rgba(96, 22, 35, 0.2);
 }
+
 #map {
     width: 100%;
     height: 62vh;
@@ -1204,6 +1230,8 @@ body {
 .leaflet-control-layers-expanded {
     padding: 20px !important;
     min-width: 280px !important;
+    max-height: 400px !important;
+    overflow-y: auto !important;
 }
 
 .leaflet-control-layers-base,
