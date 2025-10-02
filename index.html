@@ -226,7 +226,7 @@
             background: white;
             border-radius: 10px;
             padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
         }
 
@@ -249,10 +249,25 @@
             min-width: 120px;
         }
 
-        .quartile-q1 { background-color: #d4edda; color: #155724; }
-        .quartile-q2 { background-color: #fff3cd; color: #856404; }
-        .quartile-q3 { background-color: #ffeaa7; color: #856404; }
-        .quartile-q4 { background-color: #f8d7da; color: #721c24; }
+        .quartile-q1 {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .quartile-q2 {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .quartile-q3 {
+            background-color: #ffeaa7;
+            color: #856404;
+        }
+
+        .quartile-q4 {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -569,7 +584,8 @@
                 <div class="row g-4 mt-4">
                     <div class="col-md-4 fade-in-up">
                         <div class="text-center">
-                            <div class="feature-icon" style="background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%) !important;">
+                            <div class="feature-icon"
+                                style="background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%) !important;">
                                 <i class="bi bi-thermometer-sun"></i>
                             </div>
                             <h5 class="fw-bold" style="color: #333 !important;">Índice de Geotermia</h5>
@@ -580,7 +596,8 @@
                     </div>
                     <div class="col-md-4 fade-in-up-delay-1">
                         <div class="text-center">
-                            <div class="feature-icon" style="background: linear-gradient(135deg, #8E44AD 0%, #9B59B6 100%) !important;">
+                            <div class="feature-icon"
+                                style="background: linear-gradient(135deg, #8E44AD 0%, #9B59B6 100%) !important;">
                                 <i class="bi bi-credit-card"></i>
                             </div>
                             <h5 class="fw-bold" style="color: #333 !important;">Índice de Deuda CFE</h5>
@@ -591,7 +608,8 @@
                     </div>
                     <div class="col-md-4 fade-in-up-delay-2">
                         <div class="text-center">
-                            <div class="feature-icon" style="background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%) !important;">
+                            <div class="feature-icon"
+                                style="background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%) !important;">
                                 <i class="bi bi-graph-up-arrow"></i>
                             </div>
                             <h5 class="fw-bold" style="color: #333 !important;">Índice de Precariedad</h5>
@@ -606,12 +624,14 @@
                 <div class="row g-4 mt-4">
                     <div class="col-md-6 fade-in-up mx-auto">
                         <div class="text-center">
-                            <div class="feature-icon" style="background: linear-gradient(135deg, #2ECC71 0%, #27AE60 100%) !important;">
+                            <div class="feature-icon"
+                                style="background: linear-gradient(135deg, #2ECC71 0%, #27AE60 100%) !important;">
                                 <i class="bi bi-flag"></i>
                             </div>
                             <h5 class="fw-bold" style="color: #333 !important;">Índice Prioritario por Estado</h5>
                             <p style="color: #666 !important;">
-                                Clasificación de prioridad de atención por entidad federativa basada en múltiples indicadores socioeconómicos.
+                                Clasificación de prioridad de atención por entidad federativa basada en múltiples
+                                indicadores socioeconómicos.
                             </p>
                         </div>
                     </div>
@@ -624,7 +644,7 @@
                             <h6 class="alert-heading text-center mb-4">
                                 <i class="bi bi-info-circle me-2"></i>Metodología de Cálculo por Cuartiles
                             </h6>
-                            
+
                             <div class="row g-4">
                                 <div class="col-md-6">
                                     <h6 class="fw-bold text-primary">
@@ -638,7 +658,7 @@
                                         <li class="mb-2">Asignación de clasificación Q1-Q4</li>
                                     </ol>
                                 </div>
-                                
+
                                 <div class="col-md-6">
                                     <h6 class="fw-bold text-primary">
                                         <i class="bi bi-pie-chart me-2"></i>Interpretación de Cuartiles:
@@ -671,7 +691,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="row mt-4">
                                 <div class="col-12">
                                     <div class="alert alert-info mb-0">
@@ -679,9 +699,12 @@
                                             <i class="bi bi-lightbulb me-2"></i>Aplicación Práctica:
                                         </h6>
                                         <p class="mb-0">
-                                            Los municipios en <strong>Q4</strong> requieren atención prioritaria, mientras que los de 
-                                            <strong>Q1</strong> pueden servir como modelos de buenas prácticas. Esta clasificación 
-                                            permite la asignación eficiente de recursos y la planificación de intervenciones específicas.
+                                            Los municipios en <strong>Q4</strong> requieren atención prioritaria,
+                                            mientras que los de
+                                            <strong>Q1</strong> pueden servir como modelos de buenas prácticas. Esta
+                                            clasificación
+                                            permite la asignación eficiente de recursos y la planificación de
+                                            intervenciones específicas.
                                         </p>
                                     </div>
                                 </div>
@@ -713,7 +736,7 @@
                             </div>
                             <h5 class="fw-bold mb-3" style="color: #333 !important;">Análisis por Cuartiles</h5>
                             <p style="color: #666 !important;">
-                                Clasificación automática de municipios en cuartiles (Q1-Q4) para identificar 
+                                Clasificación automática de municipios en cuartiles (Q1-Q4) para identificar
                                 prioridades de atención según cada indicador.
                             </p>
                             <ul class="list-unstyled text-start mt-3">
@@ -743,7 +766,7 @@
                             </div>
                             <h5 class="fw-bold mb-3" style="color: #333 !important;">Doble Perspectiva</h5>
                             <p style="color: #666 !important;">
-                                Análisis comparativo entre la perspectiva nacional y estatal para 
+                                Análisis comparativo entre la perspectiva nacional y estatal para
                                 una evaluación más precisa del contexto local.
                             </p>
                             <ul class="list-unstyled text-start mt-3">
@@ -773,7 +796,7 @@
                             </div>
                             <h5 class="fw-bold mb-3" style="color: #333 !important;">Visualización Interactiva</h5>
                             <p style="color: #666 !important;">
-                                Mapas interactivos con codificación por colores, filtros dinámicos 
+                                Mapas interactivos con codificación por colores, filtros dinámicos
                                 y herramientas de análisis espacial.
                             </p>
                             <ul class="list-unstyled text-start mt-3">
@@ -847,13 +870,13 @@
                                     </li>
                                 </ul>
                             </div>
-                            
+
                             <div class="alert alert-success">
                                 <h6 class="alert-heading">
                                     <i class="bi bi-lightbulb me-2"></i>Mejoras Principales
                                 </h6>
                                 <p class="mb-0">
-                                    Mayor precisión en la identificación de municipios prioritarios 
+                                    Mayor precisión en la identificación de municipios prioritarios
                                     con análisis energético especializado y consideración de deuda eléctrica.
                                 </p>
                             </div>
@@ -904,13 +927,13 @@
                                     </li>
                                 </ul>
                             </div>
-                            
+
                             <div class="alert alert-light">
                                 <h6 class="alert-heading">
                                     <i class="bi bi-info-circle me-2"></i>Funcionalidad Base
                                 </h6>
                                 <p class="mb-0">
-                                    Sistema fundamental de evaluación con análisis por cuartiles 
+                                    Sistema fundamental de evaluación con análisis por cuartiles
                                     y visualización geográfica básica.
                                 </p>
                             </div>

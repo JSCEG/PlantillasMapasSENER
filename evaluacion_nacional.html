@@ -177,6 +177,59 @@
             }
         }
 
+        /* Estilos para el nuevo layout mejorado */
+        .map-expanded {
+            height: 85vh !important;
+            min-height: 600px !important;
+        }
+
+        .map-normal {
+            height: 70vh !important;
+            min-height: 500px !important;
+        }
+
+        #go-to-results {
+            animation: pulse-button 2s infinite;
+        }
+
+        @keyframes pulse-button {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+            }
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(40, 167, 69, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+            }
+        }
+
+        /* Transición suave para el colapso de la calculadora */
+        #impact-panel-collapse {
+            transition: all 0.3s ease;
+        }
+
+        /* Mejorar la apariencia de las cards */
+        .card {
+            border: 1px solid rgba(0,0,0,.125);
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+
+        .card-header {
+            background-color: rgba(var(--bs-primary-rgb), 0.1);
+            border-bottom: 1px solid rgba(var(--bs-primary-rgb), 0.2);
+        }
+
+        /* Sticky para la calculadora cuando está colapsada */
+        .calculator-sticky {
+            position: sticky;
+            top: 20px;
+            z-index: 1000;
+        }
+
         /* Mejorar responsive design para mobile */
         @media (max-width: 768px) {
             #map {
@@ -184,8 +237,9 @@
                 min-height: 400px !important;
             }
 
-            .col-lg-5 {
-                margin-bottom: 1rem;
+            .map-expanded {
+                height: 75vh !important;
+                min-height: 500px !important;
             }
 
             .municipality-popup {
@@ -203,6 +257,11 @@
 
             #resultados-chart-container {
                 margin-top: 1rem !important;
+            }
+
+            /* En móviles, hacer la calculadora más compacta */
+            .card-body .row .col-lg-6 {
+                margin-bottom: 1rem;
             }
         }
     </style>
@@ -282,50 +341,53 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
 
-            <!-- Contenedor Principal (Calculadora y Mapa) -->
-            <div class="row">
-                <!-- Columna de la Calculadora (Visible en Escritorio, Colapsable en Móvil) -->
-                <div class="col-lg-5 col-xl-4">
-                    <div class="d-lg-none mb-3">
-                        <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#impact-panel-collapse" aria-expanded="false"
-                            aria-controls="impact-panel-collapse">
-                            <i class="bi bi-calculator me-2"></i> Mostrar/Ocultar Calculadora
-                        </button>
-                    </div>
+            <!-- Sección de Calculadora (Arriba, Colapsable) -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card shadow-sm">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <strong><i class="bi bi-calculator me-2"></i>Calculadora de Impacto Social</strong>
+                            <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#impact-panel-collapse" aria-expanded="true"
+                                aria-controls="impact-panel-collapse">
+                                <i class="bi bi-chevron-up" id="collapse-icon"></i>
+                                <span id="collapse-text">Ocultar</span>
+                            </button>
+                        </div>
+                        <div class="collapse show" id="impact-panel-collapse">
+                            <div class="card-body">
+                                <div class="row">
+                                    <!-- Columna de Indicadores -->
+                                    <div class="col-lg-6">
+                                        <form id="impact-form">
+                                            <div id="indicators-list" class="mb-3">
+                                                <!-- Se llena dinámicamente con una cuadrícula responsiva -->
+                                            </div>
 
-                    <div class="collapse d-lg-block" id="impact-panel-collapse">
-                        <div id="impact-panel">
-                            <div class="card shadow-sm">
-                                <div class="card-header">
-                                    <strong><i class="bi bi-calculator me-2"></i>Calculadora de Impacto</strong>
-                                </div>
-                                <div class="card-body">
-                                    <form id="impact-form">
-                                        <div id="indicators-list" class="mb-2">
-                                            <!-- Se llena dinámicamente con una cuadrícula responsiva -->
-                                        </div>
+                                            <div class="form-check form-switch mb-3">
+                                                <input class="form-check-input" type="checkbox" id="single-indicator-mode">
+                                                <label class="form-check-label" for="single-indicator-mode">Seleccionar solo
+                                                    1 indicador</label>
+                                            </div>
 
-                                        <div class="form-check form-switch mb-2">
-                                            <input class="form-check-input" type="checkbox" id="single-indicator-mode">
-                                            <label class="form-check-label" for="single-indicator-mode">Seleccionar solo
-                                                1 indicador</label>
-                                        </div>
+                                            <div id="impact-validation" class="text-danger small mb-2"
+                                                style="display:none;"></div>
 
-                                        <div id="impact-validation" class="text-danger small mb-2"
-                                            style="display:none;"></div>
+                                            <div class="mb-3">
+                                                <small class="text-muted">
+                                                    <strong>Índices activos:</strong> <span id="active-indices">-</span><br>
+                                                    <strong>Suma de pesos:</strong> <span id="weight-sum"
+                                                        class="fw-bold">0.00</span>
+                                                </small>
+                                            </div>
+                                        </form>
+                                    </div>
 
-                                        <div class="mb-3">
-                                            <small class="text-muted">
-                                                <strong>Índices activos:</strong> <span id="active-indices">-</span><br>
-                                                <strong>Suma de pesos:</strong> <span id="weight-sum"
-                                                    class="fw-bold">0.00</span>
-                                            </small>
-                                        </div>
-
+                                    <!-- Columna de Controles y Estadísticas -->
+                                    <div class="col-lg-6">
                                         <!-- Panel de estadísticas rápidas (oculto inicialmente) -->
                                         <div id="quick-stats" class="card bg-light mb-3" style="display: none;">
-                                            <div class="card-body p-2">
+                                            <div class="card-body p-3">
                                                 <h6 class="card-title mb-2"><i
                                                         class="bi bi-speedometer2 me-1"></i>Estadísticas Rápidas</h6>
                                                 <div class="row g-2 text-center">
@@ -362,6 +424,7 @@
                                             </div>
                                         </div>
 
+                                        <!-- Controles Principales -->
                                         <div class="d-flex gap-2 mb-3 flex-wrap">
                                             <button type="button" id="normalize-weights"
                                                 class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip"
@@ -379,6 +442,7 @@
                                             </button>
                                         </div>
 
+                                        <!-- Controles de Configuración -->
                                         <div class="d-flex gap-2 mb-3 flex-wrap">
                                             <button type="button" id="save-config"
                                                 class="btn btn-sm btn-outline-success" data-bs-toggle="tooltip"
@@ -394,85 +458,111 @@
                                                 <option value="">Configuraciones...</option>
                                             </select>
                                         </div>
-                                    </form>
+
+                                        <!-- Botón para ir a resultados -->
+                                        <div id="go-to-results-container" class="text-center mt-3" style="display: none;">
+                                            <button type="button" id="go-to-results" class="btn btn-success">
+                                                <i class="bi bi-arrow-down me-2"></i>Ver Resultados Detallados
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Columna del Mapa -->
-                <div class="col-lg-7 col-xl-8">
-                    <div id="map-container" style="position: relative;">
-                        <div id="map" style="width:100%; height:80vh; min-height:500px; border-radius: 0.375rem;"></div>
-                        <div id="map-legend" class="map-legend-container oculto">
-                            <div class="legend-item"><span class="legend-color-box"
-                                    style="background-color: #2ECC71;"></span> Q1 (Mejor)</div>
-                            <div class="legend-item"><span class="legend-color-box"
-                                    style="background-color: #F1C40F;"></span> Q2</div>
-                            <div class="legend-item"><span class="legend-color-box"
-                                    style="background-color: #E67E22;"></span> Q3</div>
-                            <div class="legend-item"><span class="legend-color-box"
-                                    style="background-color: #C0392B;"></span> Q4 (Peor)</div>
-                            <div class="legend-item"><span class="legend-color-box"
-                                    style="background-color: #6c757d;"></span> Sin Datos</div>
+            <!-- Sección del Mapa (Centro, Prominente) -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card shadow-sm">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <strong><i class="bi bi-map me-2"></i>Mapa Interactivo - Evaluación Nacional</strong>
+                            <div class="d-flex gap-2">
+                                <button type="button" id="center-map-btn" class="btn btn-sm btn-outline-primary" 
+                                        data-bs-toggle="tooltip" title="Centrar mapa en México">
+                                    <i class="bi bi-geo-alt"></i>
+                                </button>
+                                <button type="button" id="toggle-map-size" class="btn btn-sm btn-outline-secondary"
+                                        data-bs-toggle="tooltip" title="Alternar tamaño del mapa">
+                                    <i class="bi bi-arrows-fullscreen"></i>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- Leyendas de Rasters debajo del mapa -->
-                    <div class="row mt-3">
-                        <div class="col-12 d-flex flex-wrap align-items-start gap-3">
-                            <div>
-                                <div id="simbol-fotovoltaico" class="color-ramp-container" style="display:none;">
-                                    <div class="color-ramp-title">Potencial fotovoltaico [kWh/kWp] Fuente: <a
-                                            href='https://globalsolaratlas.info/download/world'
-                                            target='_blank'>globalsolaratlas.info</a></div>
-                                    <div class="color-gradient-bar fotovoltaico-gradient"></div>
-                                    <div class="color-labels values">
-                                        <span>3.22</span><span>3.63</span><span>4.04</span><span>4.44</span><span>4.85</span><span>5.26</span><span>5.67</span>
-                                    </div>
-                                    <div class="color-labels categories">
-                                        <span>Bajo</span><span></span><span>Moderado</span><span></span><span>Bueno</span><span>Alto</span><span>Muy
-                                            alto</span>
-                                    </div>
+                        <div class="card-body p-0">
+                            <div id="map-container" style="position: relative;">
+                                <div id="map" style="width:100%; height:70vh; min-height:500px; border-radius: 0 0 0.375rem 0.375rem;"></div>
+                                <div id="map-legend" class="map-legend-container oculto">
+                                    <div class="legend-item"><span class="legend-color-box"
+                                            style="background-color: #2ECC71;"></span> Q1 (Mejor)</div>
+                                    <div class="legend-item"><span class="legend-color-box"
+                                            style="background-color: #F1C40F;"></span> Q2</div>
+                                    <div class="legend-item"><span class="legend-color-box"
+                                            style="background-color: #E67E22;"></span> Q3</div>
+                                    <div class="legend-item"><span class="legend-color-box"
+                                            style="background-color: #C0392B;"></span> Q4 (Peor)</div>
+                                    <div class="legend-item"><span class="legend-color-box"
+                                            style="background-color: #6c757d;"></span> Sin Datos</div>
                                 </div>
+                            </div>
 
-                                <div id="simbol-radiacion" class="color-ramp-container" style="display:none;">
-                                    <div class="color-ramp-title">Radiación horizontal [kWh/m²] Fuente: <a
-                                            href='https://globalsolaratlas.info/download/world'
-                                            target='_blank'>globalsolaratlas.info</a></div>
-                                    <div class="color-gradient-bar radiacion-gradient"></div>
-                                    <div class="color-labels values">
-                                        <span>3.58</span><span>3.99</span><span>4.39</span><span>4.8</span><span>5.2</span><span>5.61</span><span>6.01</span><span>6.42</span>
-                                    </div>
-                                    <div class="color-labels categories">
-                                        <span>Bajo</span><span></span><span>Moderado</span><span></span><span>Bueno</span><span></span><span>Alto</span><span>Muy
-                                            alto</span>
-                                    </div>
-                                </div>
+                            <!-- Leyendas de Rasters dentro del card del mapa -->
+                            <div class="p-3">
+                                <div class="d-flex flex-wrap align-items-start gap-3">
+                                    <div>
+                                        <div id="simbol-fotovoltaico" class="color-ramp-container" style="display:none;">
+                                            <div class="color-ramp-title">Potencial fotovoltaico [kWh/kWp] Fuente: <a
+                                                    href='https://globalsolaratlas.info/download/world'
+                                                    target='_blank'>globalsolaratlas.info</a></div>
+                                            <div class="color-gradient-bar fotovoltaico-gradient"></div>
+                                            <div class="color-labels values">
+                                                <span>3.22</span><span>3.63</span><span>4.04</span><span>4.44</span><span>4.85</span><span>5.26</span><span>5.67</span>
+                                            </div>
+                                            <div class="color-labels categories">
+                                                <span>Bajo</span><span></span><span>Moderado</span><span></span><span>Bueno</span><span>Alto</span><span>Muy
+                                                    alto</span>
+                                            </div>
+                                        </div>
 
-                                <div id="simbol-viento-50m" class="color-ramp-container" style="display:none;">
-                                    <div class="color-ramp-title">Velocidad de viento a 50m [m/s] Fuente: <a
-                                            href='https://globalwindatlas.info/es/download/gis-files'
-                                            target='_blank'>globalwindatlas.info</a></div>
-                                    <div class="color-gradient-bar viento-gradient"></div>
-                                    <div class="color-labels values">
-                                        <span>&lt;3</span><span>6</span><span>9</span><span>12</span><span>15&lt;</span>
-                                    </div>
-                                    <div class="color-ramp-description">La velocidad del viento se incrementa conforme
-                                        aumenta la altura, hay más densidad y potencial aprovechable.</div>
-                                </div>
+                                        <div id="simbol-radiacion" class="color-ramp-container" style="display:none;">
+                                            <div class="color-ramp-title">Radiación horizontal [kWh/m²] Fuente: <a
+                                                    href='https://globalsolaratlas.info/download/world'
+                                                    target='_blank'>globalsolaratlas.info</a></div>
+                                            <div class="color-gradient-bar radiacion-gradient"></div>
+                                            <div class="color-labels values">
+                                                <span>3.58</span><span>3.99</span><span>4.39</span><span>4.8</span><span>5.2</span><span>5.61</span><span>6.01</span><span>6.42</span>
+                                            </div>
+                                            <div class="color-labels categories">
+                                                <span>Bajo</span><span></span><span>Moderado</span><span></span><span>Bueno</span><span></span><span>Alto</span><span>Muy
+                                                    alto</span>
+                                            </div>
+                                        </div>
 
-                                <div id="simbol-viento-100m" class="color-ramp-container" style="display:none;">
-                                    <div class="color-ramp-title">Velocidad de viento a 100m [m/s] Fuente: <a
-                                            href='https://globalwindatlas.info/es/download/gis-files'
-                                            target='_blank'>globalwindatlas.info</a></div>
-                                    <div class="color-gradient-bar viento-gradient-100m"></div>
-                                    <div class="color-labels values">
-                                        <span>&lt;3</span><span>6</span><span>9</span><span>12</span><span>15&lt;</span>
+                                        <div id="simbol-viento-50m" class="color-ramp-container" style="display:none;">
+                                            <div class="color-ramp-title">Velocidad de viento a 50m [m/s] Fuente: <a
+                                                    href='https://globalwindatlas.info/es/download/gis-files'
+                                                    target='_blank'>globalwindatlas.info</a></div>
+                                            <div class="color-gradient-bar viento-gradient"></div>
+                                            <div class="color-labels values">
+                                                <span>&lt;3</span><span>6</span><span>9</span><span>12</span><span>15&lt;</span>
+                                            </div>
+                                            <div class="color-ramp-description">La velocidad del viento se incrementa conforme
+                                                aumenta la altura, hay más densidad y potencial aprovechable.</div>
+                                        </div>
+
+                                        <div id="simbol-viento-100m" class="color-ramp-container" style="display:none;">
+                                            <div class="color-ramp-title">Velocidad de viento a 100m [m/s] Fuente: <a
+                                                    href='https://globalwindatlas.info/es/download/gis-files'
+                                                    target='_blank'>globalwindatlas.info</a></div>
+                                            <div class="color-gradient-bar viento-gradient-100m"></div>
+                                            <div class="color-labels values">
+                                                <span>&lt;3</span><span>6</span><span>9</span><span>12</span><span>15&lt;</span>
+                                            </div>
+                                            <div class="color-ramp-description">A mayor altura, mayor velocidad del viento y
+                                                mejor potencial para generación eólica.</div>
+                                        </div>
                                     </div>
-                                    <div class="color-ramp-description">A mayor altura, mayor velocidad del viento y
-                                        mejor potencial para generación eólica.</div>
                                 </div>
                             </div>
                         </div>
@@ -1033,3 +1123,124 @@
 </body>
 
 </html>
+    <!--
+ Scripts adicionales para el nuevo layout -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Manejar el colapso de la calculadora
+            const collapseElement = document.getElementById('impact-panel-collapse');
+            const collapseIcon = document.getElementById('collapse-icon');
+            const collapseText = document.getElementById('collapse-text');
+            const calculatorCard = collapseElement.closest('.card');
+
+            collapseElement.addEventListener('show.bs.collapse', function() {
+                collapseIcon.className = 'bi bi-chevron-up';
+                collapseText.textContent = 'Ocultar';
+                calculatorCard.classList.remove('calculator-sticky');
+            });
+
+            collapseElement.addEventListener('hide.bs.collapse', function() {
+                collapseIcon.className = 'bi bi-chevron-down';
+                collapseText.textContent = 'Mostrar';
+                calculatorCard.classList.add('calculator-sticky');
+            });
+
+            // Botón para alternar tamaño del mapa
+            const toggleMapSizeBtn = document.getElementById('toggle-map-size');
+            const mapElement = document.getElementById('map');
+            let mapExpanded = false;
+
+            if (toggleMapSizeBtn) {
+                toggleMapSizeBtn.addEventListener('click', function() {
+                    mapExpanded = !mapExpanded;
+                    
+                    if (mapExpanded) {
+                        mapElement.classList.remove('map-normal');
+                        mapElement.classList.add('map-expanded');
+                        this.innerHTML = '<i class="bi bi-arrows-collapse"></i>';
+                        this.setAttribute('title', 'Reducir tamaño del mapa');
+                    } else {
+                        mapElement.classList.remove('map-expanded');
+                        mapElement.classList.add('map-normal');
+                        this.innerHTML = '<i class="bi bi-arrows-fullscreen"></i>';
+                        this.setAttribute('title', 'Expandir tamaño del mapa');
+                    }
+
+                    // Invalidar el tamaño del mapa para que se redibuje correctamente
+                    if (window.map) {
+                        setTimeout(() => {
+                            window.map.invalidateSize();
+                        }, 300);
+                    }
+                });
+            }
+
+            // Botón para ir a resultados
+            const goToResultsBtn = document.getElementById('go-to-results');
+            if (goToResultsBtn) {
+                goToResultsBtn.addEventListener('click', function() {
+                    const resultadosContainer = document.getElementById('resultados-container');
+                    if (resultadosContainer) {
+                        resultadosContainer.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start' 
+                        });
+                    }
+                });
+            }
+
+            // Mostrar botón de ir a resultados cuando se aplique el cálculo
+            const originalApplyFunction = window.applyImpactCalculation;
+            if (originalApplyFunction) {
+                window.applyImpactCalculation = function() {
+                    const result = originalApplyFunction.apply(this, arguments);
+                    
+                    // Mostrar el botón de ir a resultados
+                    const goToResultsContainer = document.getElementById('go-to-results-container');
+                    if (goToResultsContainer) {
+                        goToResultsContainer.style.display = 'block';
+                    }
+                    
+                    return result;
+                };
+            }
+
+            // Observador para mostrar/ocultar el botón cuando aparezcan los resultados
+            const resultadosContainer = document.getElementById('resultados-container');
+            if (resultadosContainer) {
+                const observer = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                            const goToResultsContainer = document.getElementById('go-to-results-container');
+                            if (goToResultsContainer) {
+                                if (resultadosContainer.classList.contains('oculto')) {
+                                    goToResultsContainer.style.display = 'none';
+                                } else {
+                                    goToResultsContainer.style.display = 'block';
+                                }
+                            }
+                        }
+                    });
+                });
+
+                observer.observe(resultadosContainer, {
+                    attributes: true,
+                    attributeFilter: ['class']
+                });
+            }
+
+            // Mejorar la experiencia de scroll suave
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
