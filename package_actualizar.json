@@ -1,0 +1,26 @@
+{
+  "name": "actualizador-brillantes-sener",
+  "version": "1.0.0",
+  "description": "Herramienta para actualizar brillantes.js con nuevos índices del Excel",
+  "main": "actualizar_brillantes_cli.js",
+  "scripts": {
+    "actualizar": "node actualizar_brillantes_cli.js",
+    "install-deps": "npm install xlsx",
+    "help": "node actualizar_brillantes_cli.js --help"
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  },
+  "keywords": [
+    "sener",
+    "excel",
+    "geojson",
+    "municipios",
+    "indices"
+  ],
+  "author": "SENER",
+  "license": "MIT",
+  "bin": {
+    "actualizar-brillantes": "./actualizar_brillantes_cli.js"
+  }
+}

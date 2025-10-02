@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convertir Excel a JSON - SENER</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c5530;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .upload-area {
+            border: 2px dashed #2c5530;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .upload-area:hover {
+            background-color: #e8f5e8;
+            border-color: #1e3a21;
+        }
+        .upload-area.dragover {
+            background-color: #d4edda;
+            border-color: #155724;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .btn {
+            background-color: #2c5530;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #1e3a21;
+        }
+        .btn:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        .progress {
+            width: 100%;
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+            display: none;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #28a745;
+            transition: width 0.3s ease;
+        }
+        .info-panel {
+            background-color: #e8f4fd;
+            border: 1px solid #bee5eb;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .error-panel {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #721c24;
+        }
+        .success-panel {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #155724;
+        }
+        .preview-table {
+            max-height: 400px;
+            overflow: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+            white-space: nowrap;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+        }
+        .field-mapping {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .mapping-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .mapping-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px;
+            background-color: white;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 Convertir Excel a JSON - Actualización de Índices</h1>
+        
+        <div class="info-panel">
+            <h3>📋 Instrucciones:</h3>
+            <ol>
+                <li>Selecciona o arrastra el archivo Excel con los nuevos índices</li>
+                <li>El sistema detectará automáticamente las columnas</li>
+                <li>Revisa la vista previa de los datos</li>
+                <li>Descarga el archivo JSON generado</li>
+                <li>Usa el JSON para actualizar brillantes.js</li>
+            </ol>
+        </div>
+
+        <div class="field-mapping">
+            <h3>🗂️ Mapeo de Campos Esperados:</h3>
+            <div class="mapping-grid">
+                <div class="mapping-item">
+                    <span><strong>Excel:</strong> codigo</span>
+                    <span><strong>→</strong> codigo</span>
+                </div>
+                <div class="mapping-item">
+                    <span><strong>Excel:</strong> NOM_ENT</span>
+                    <span><strong>→</strong> nom_ent</span>
+                </div>
+                <div class="mapping-item">
+                    <span><strong>Excel:</strong> NOM_MUN</span>
+                    <span><strong>→</strong> nom_mun</span>
+                </div>
+                <div class="mapping-item">
+                    <span><strong>Excel:</strong> numero_viviendas</span>
+                    <span><strong>→</strong> num_vivien</span>
+                </div>
+                <div class="mapping-item">
+                    <span><strong>Excel:</strong> indice_ingreso</span>
+                    <span><strong>→</strong> indice_ing</span>
+                </div>
+                <div class="mapping-item">
+                    <span><strong>Excel:</strong> indice_electrico</span>
+                    <span><strong>→</strong> indice_ele</span>
+                </div>
+                <div class="mapping-item">
+                    <span><strong>Excel:</strong> indice_pobreza_energetica</span>
+                    <span><strong>→</strong> indice_pob</span>
+                </div>
+                <div class="mapping-item">
+                    <span><strong>Excel:</strong> indice_sociodemografico</span>
+                    <span><strong>→</strong> indice_soc</span>
+                </div>
+                <div class="mapping-item">
+                    <span><strong>Excel:</strong> indice_geotermia</span>
+                    <span><strong>→</strong> indice_geo</span>
+                </div>
+                <div class="mapping-item">
+                    <span><strong>Excel:</strong> indice_problemas_electricos</span>
+                    <span><strong>→</strong> indice_pro</span>
+                </div>
+                <div class="mapping-item">
+                    <span><strong>Excel:</strong> indice_actividades_productivas_normalizado</span>
+                    <span><strong>→</strong> indice_act</span>
+                </div>
+                <div class="mapping-item">
+                    <span><strong>Excel:</strong> Código Geoespacial INEGI</span>
+                    <span><strong>→</strong> CVEGEO</span>
+                </div>
+                <div class="mapping-item">
+                    <span><strong>Excel:</strong> Indice_Deuda_CFE</span>
+                    <span><strong>→</strong> indice_deuda_cfe</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="upload-area" id="uploadArea">
+            <h3>📁 Seleccionar Archivo Excel</h3>
+            <p>Arrastra el archivo aquí o haz clic para seleccionar</p>
+            <p><small>Formatos soportados: .xlsx, .xls</small></p>
+            <input type="file" id="fileInput" accept=".xlsx,.xls">
+        </div>
+
+        <div class="progress" id="progressBar">
+            <div class="progress-bar" id="progressBarFill"></div>
+        </div>
+
+        <div id="results"></div>
+
+        <div id="preview"></div>
+
+        <div id="actions" style="text-align: center; display: none;">
+            <button class="btn" id="downloadJson">📥 Descargar JSON</button>
+            <button class="btn" id="updateBrillantes">🔄 Actualizar brillantes.js</button>
+        </div>
+    </div>
+
+    <script>
+        let processedData = null;
+        let originalBrillantes = null;
+
+        // Mapeo de campos del Excel a nombres JavaScript
+        const camposMapeados = {
+            'codigo': 'codigo',
+            'NOM_ENT': 'nom_ent', 
+            'NOM_MUN': 'nom_mun',
+            'Nivel': 'nivel',
+            'numero_viviendas': 'num_vivien',
+            'indice_ingreso': 'indice_ing',
+            'indice_electrico': 'indice_ele', 
+            'indice_pobreza_energetica': 'indice_pob',
+            'indice_sociodemografico': 'indice_soc',
+            'indice_geotermia': 'indice_geo',
+            'indice_problemas_electricos': 'indice_pro',
+            'indice_actividades_productivas_normalizado': 'indice_act',
+            'Índice General de Precariedad (old)': 'indice_general_precariedad_old',
+            'Índice Prioritario Por Estado': 'indice_prioritario_estado',
+            'indice_general_precariedad_clipped': 'indice_general_precariedad_clipped',
+            'Código Geoespacial INEGI': 'CVEGEO',
+            'Indice_Deuda_CFE': 'indice_deuda_cfe'
+        };
+
+        // Configurar drag & drop
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                processFile(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                processFile(e.target.files[0]);
+            }
+        });
+
+        function showProgress(show = true) {
+            document.getElementById('progressBar').style.display = show ? 'block' : 'none';
+        }
+
+        function updateProgress(percent) {
+            document.getElementById('progressBarFill').style.width = percent + '%';
+        }
+
+        function showResults(content, type = 'info') {
+            const results = document.getElementById('results');
+            const className = type === 'error' ? 'error-panel' : 
+                             type === 'success' ? 'success-panel' : 'info-panel';
+            results.innerHTML = `<div class="${className}">${content}</div>`;
+        }
+
+        function processFile(file) {
+            if (!file.name.match(/\.(xlsx|xls)$/i)) {
+                showResults('❌ Por favor selecciona un archivo Excel (.xlsx o .xls)', 'error');
+                return;
+            }
+
+            showProgress(true);
+            updateProgress(10);
+            showResults('📖 Leyendo archivo Excel...');
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    updateProgress(30);
+                    showResults('🔄 Procesando datos...');
+
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    
+                    updateProgress(50);
+
+                    // Tomar la primera hoja
+                    const sheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[sheetName];
+                    
+                    // Convertir a JSON
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                    
+                    updateProgress(70);
+                    showResults(`✅ Archivo procesado exitosamente. ${jsonData.length} filas encontradas.`, 'success');
+
+                    // Procesar y mapear los datos
+                    processedData = jsonData.map(row => {
+                        const mappedRow = {};
+                        Object.keys(camposMapeados).forEach(excelField => {
+                            const jsField = camposMapeados[excelField];
+                            if (row[excelField] !== undefined && row[excelField] !== null) {
+                                let value = row[excelField];
+                                // Convertir a número si es posible
+                                if (typeof value === 'string' && !isNaN(parseFloat(value)) && isFinite(value)) {
+                                    value = parseFloat(value);
+                                }
+                                mappedRow[jsField] = value;
+                            }
+                        });
+                        
+                        // Asegurar CVEGEO con formato correcto
+                        if (row['Código Geoespacial INEGI']) {
+                            mappedRow.CVEGEO = row['Código Geoespacial INEGI'].toString().padStart(5, '0');
+                        }
+                        
+                        return mappedRow;
+                    });
+
+                    updateProgress(90);
+                    showPreview(processedData);
+                    updateProgress(100);
+                    
+                    document.getElementById('actions').style.display = 'block';
+                    
+                    setTimeout(() => showProgress(false), 1000);
+
+                } catch (error) {
+                    console.error('Error procesando archivo:', error);
+                    showResults(`❌ Error procesando el archivo: ${error.message}`, 'error');
+                    showProgress(false);
+                }
+            };
+
+            reader.readAsArrayBuffer(file);
+        }
+
+        function showPreview(data) {
+            if (!data || data.length === 0) return;
+
+            const preview = document.getElementById('preview');
+            const sampleData = data.slice(0, 10); // Mostrar solo las primeras 10 filas
+            
+            let html = `
+                <h3>👀 Vista Previa (primeras 10 filas de ${data.length} total):</h3>
+                <div class="preview-table">
+                    <table>
+                        <thead>
+                            <tr>
+            `;
+
+            // Headers
+            const headers = Object.keys(sampleData[0]);
+            headers.forEach(header => {
+                html += `<th>${header}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+
+            // Rows
+            sampleData.forEach(row => {
+                html += '<tr>';
+                headers.forEach(header => {
+                    const value = row[header];
+                    const displayValue = typeof value === 'number' ? value.toFixed(6) : value;
+                    html += `<td>${displayValue || ''}</td>`;
+                });
+                html += '</tr>';
+            });
+
+            html += '</tbody></table></div>';
+            preview.innerHTML = html;
+        }
+
+        // Descargar JSON
+        document.getElementById('downloadJson').addEventListener('click', () => {
+            if (!processedData) return;
+
+            const blob = new Blob([JSON.stringify(processedData, null, 2)], { 
+                type: 'application/json' 
+            });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'indices_municipales.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showResults('📥 Archivo JSON descargado exitosamente.', 'success');
+        });
+
+        // Actualizar brillantes.js
+        document.getElementById('updateBrillantes').addEventListener('click', async () => {
+            if (!processedData) return;
+
+            try {
+                showResults('🔄 Cargando brillantes.js...');
+                
+                // Cargar brillantes.js
+                const response = await fetch('indicadores/brillantes.js');
+                const brillantesText = await response.text();
+                
+                // Extraer el objeto JavaScript (remover 'var brillantes = ' y ';' final)
+                const jsonStart = brillantesText.indexOf('{');
+                const jsonEnd = brillantesText.lastIndexOf('}') + 1;
+                const brillantesJson = brillantesText.substring(jsonStart, jsonEnd);
+                
+                originalBrillantes = JSON.parse(brillantesJson);
+                
+                showResults('🔄 Actualizando datos...');
+                
+                // Crear mapa de CVEGEO -> datos del Excel
+                const mapaExcel = {};
+                processedData.forEach(row => {
+                    if (row.CVEGEO) {
+                        mapaExcel[row.CVEGEO] = row;
+                    }
+                });
+
+                // Actualizar features
+                let actualizados = 0;
+                let noEncontrados = 0;
+
+                const featuresActualizados = originalBrillantes.features.map(feature => {
+                    const cvegeo = feature.properties.CVEGEO;
+                    if (mapaExcel[cvegeo]) {
+                        actualizados++;
+                        return {
+                            ...feature,
+                            properties: {
+                                ...feature.properties,
+                                ...mapaExcel[cvegeo]
+                            }
+                        };
+                    } else {
+                        noEncontrados++;
+                        return feature;
+                    }
+                });
+
+                const brillantesActualizado = {
+                    ...originalBrillantes,
+                    features: featuresActualizados
+                };
+
+                // Generar el archivo JavaScript actualizado
+                const nuevoContenido = `var brillantes = ${JSON.stringify(brillantesActualizado, null, 2)};`;
+
+                // Descargar el archivo actualizado
+                const blob = new Blob([nuevoContenido], { type: 'application/javascript' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'brillantes_actualizado.js';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                showResults(`✅ brillantes.js actualizado exitosamente!<br>
+                           📊 Municipios actualizados: ${actualizados}<br>
+                           ⚠️ Municipios no encontrados: ${noEncontrados}<br>
+                           📥 Archivo descargado como 'brillantes_actualizado.js'`, 'success');
+
+            } catch (error) {
+                console.error('Error actualizando brillantes.js:', error);
+                showResults(`❌ Error actualizando brillantes.js: ${error.message}`, 'error');
+            }
+        });
+    </script>
+</body>
+</html>
